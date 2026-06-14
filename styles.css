@@ -2208,3 +2208,418 @@ body.cursor-hover .cursor-ring {
     box-shadow 0.4s var(--e),
     transform 0.4s var(--e);
 }
+
+
+/* ================================================================
+   MOBILE OPTIMIZATIONS
+   Pauses heavy animations, reduces sizes, improves performance.
+   Desktop remains completely untouched.
+   ================================================================ */
+
+@media (max-width: 860px) {
+
+  /* --- PERFORMANCE: disable heavy CSS animations --- */
+  .about__orb {
+    animation: none;
+  }
+
+  .about__ring,
+  .about__ring--1,
+  .about__ring--2,
+  .about__ring--3 {
+    animation: none;
+  }
+
+  .about__ring::after {
+    display: none;
+  }
+
+  .coder__steam,
+  .coder__steam--2,
+  .coder__steam--3 {
+    animation: none;
+    opacity: 0.1;
+  }
+
+  .coder__glow {
+    animation: none;
+  }
+
+  .nav__pulse {
+    animation: none;
+  }
+
+  .hero__scroll-line::after {
+    animation: none;
+    opacity: 0.3;
+    height: 100%;
+  }
+
+  /* --- Reduce grain/glow for GPU savings --- */
+  .grain {
+    display: none;
+  }
+
+  .particles {
+    opacity: 0.15;
+  }
+
+  .hero__glow {
+    opacity: 0.15;
+    filter: blur(80px);
+  }
+
+  .hero__grid {
+    opacity: 0.15;
+    background-size: 60px 60px;
+  }
+
+  /* --- HERO: tighter layout --- */
+  .hero {
+    min-height: auto;
+    height: auto;
+    padding: 120px 0 80px;
+  }
+
+  .hero__fg {
+    padding: 0 20px;
+  }
+
+  .hero__tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+
+  .hero__tag::before,
+  .hero__tag::after {
+    width: 20px;
+  }
+
+  .hero__title {
+    font-size: clamp(36px, 12vw, 64px);
+    margin-bottom: 20px;
+  }
+
+  .hero__title .line {
+    padding-bottom: 0.1em;
+  }
+
+  .hero__sub {
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 14px 24px;
+    font-size: 11px;
+    width: 100%;
+    max-width: 260px;
+    justify-content: center;
+  }
+
+  .hero__socials {
+    margin-top: 24px;
+    gap: 10px;
+  }
+
+  .hero__socials a {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero__socials svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .hero__scroll {
+    display: none;
+  }
+
+  /* --- STATEMENTS: shorter on mobile --- */
+  .statement {
+    height: auto;
+    min-height: 50vh;
+    padding: 60px 20px;
+  }
+
+  .statement__text {
+    font-size: clamp(22px, 6vw, 36px);
+    line-height: 1.25;
+  }
+
+  .statement__text .word {
+    opacity: 1 !important;
+  }
+
+  /* --- ABOUT: compact layout --- */
+  .about__pin {
+    padding: 60px 20px;
+    gap: 24px;
+  }
+
+  .about__text {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+
+  .about__langs {
+    gap: 6px;
+  }
+
+  .about__lang {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  /* --- MARQUEE: smaller text, smaller buttons --- */
+  .marquee__overflow {
+    padding: 20px 0;
+  }
+
+  .marquee__track {
+    font-size: clamp(16px, 4vw, 22px);
+    gap: 30px;
+  }
+
+  /* --- EXPERIENCE: compact card --- */
+  .experience__pin {
+    padding: 60px 20px;
+    align-items: flex-start;
+  }
+
+  .experience__role {
+    font-size: clamp(24px, 7vw, 36px);
+  }
+
+  .experience__company {
+    font-size: 15px;
+  }
+
+  .experience__highlights li {
+    font-size: 13px;
+  }
+
+  /* --- PROJECTS: compact cards --- */
+  .projects {
+    padding: 80px 0;
+  }
+
+  .projects__grid {
+    margin-top: 40px;
+    gap: 16px;
+  }
+
+  .proj-card {
+    padding: 24px;
+    min-height: auto;
+  }
+
+  .proj-card__title {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  .proj-card__desc {
+    font-size: 13px;
+  }
+
+  /* --- SKILLS: compact --- */
+  .skills__pin {
+    padding: 60px 20px;
+    gap: 32px;
+  }
+
+  .skills__cats {
+    margin-top: 20px;
+  }
+
+  .skill-cat-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .skills__display {
+    min-height: auto;
+    gap: 8px;
+  }
+
+  .skill-chip {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  /* --- EDUCATION: compact --- */
+  .education {
+    padding: 80px 0;
+  }
+
+  .edu__list {
+    margin-top: 40px;
+    gap: 16px;
+  }
+
+  .edu-card {
+    padding: 24px;
+  }
+
+  .edu-card__qual {
+    font-size: clamp(16px, 4.5vw, 22px);
+  }
+
+  .edu-card__meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* --- CERTIFICATIONS: compact --- */
+  .certifications {
+    padding: 0 0 80px;
+  }
+
+  .cert__grid {
+    margin-top: 40px;
+    gap: 12px;
+  }
+
+  .cert-card {
+    padding: 20px;
+  }
+
+  .cert-card__title {
+    font-size: 15px;
+  }
+
+  /* --- CONTACT: not full-height on mobile --- */
+  .contact {
+    min-height: auto;
+    padding: 60px 20px;
+  }
+
+  .contact__title {
+    font-size: clamp(32px, 10vw, 56px);
+  }
+
+  .contact__sub {
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .contact__links {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .contact__link {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 10px;
+  }
+
+  /* --- SECTION LABELS & TITLES: smaller --- */
+  .sec-label {
+    font-size: 10px;
+    margin-bottom: 16px;
+  }
+
+  .sec-title {
+    font-size: clamp(28px, 7vw, 44px);
+  }
+
+  .sec-title--sm {
+    font-size: clamp(22px, 6vw, 32px);
+  }
+
+  /* --- THEME TOGGLE: smaller on mobile --- */
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    margin-left: 8px;
+  }
+
+  .theme-toggle__icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* --- NAV: tighter padding --- */
+  .nav {
+    padding: 16px 16px;
+  }
+
+  .nav.scrolled {
+    padding: 12px 16px;
+  }
+
+  .nav__monogram {
+    font-size: 18px;
+  }
+
+  /* --- Tags: smaller --- */
+  .tag {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+}
+
+/* Extra-small screens (phones in portrait) */
+@media (max-width: 400px) {
+  .hero__title {
+    font-size: clamp(30px, 11vw, 48px);
+  }
+
+  .contact__title {
+    font-size: clamp(28px, 9vw, 44px);
+  }
+
+  .statement__text {
+    font-size: clamp(20px, 5.5vw, 30px);
+  }
+
+  .proj-card {
+    padding: 18px;
+  }
+
+  .edu-card {
+    padding: 18px;
+  }
+
+  .cert-card {
+    padding: 16px;
+  }
+}
+
+/* Reduced motion preference — respects user OS setting */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee__track {
+    animation: none !important;
+  }
+
+  .particles {
+    display: none;
+  }
+
+  .grain {
+    display: none;
+  }
+}

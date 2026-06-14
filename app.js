@@ -246,7 +246,8 @@
     let width;
     let height;
     const particles = [];
-    const PARTICLE_COUNT = 45;
+    const isMobile = innerWidth < 860;
+    const PARTICLE_COUNT = isMobile ? 15 : 45;
 
     function resize() {
       width = canvas.width = innerWidth;
@@ -744,6 +745,8 @@
       .to(".hero__scene",        { opacity: 0.6, y: 0, scale: 1, duration: 1.2, ease: "power3.out" }, "-=1.2");
 
     // --- Coder scene: code lines typing animation ---
+    const isMobileDevice = innerWidth < 860;
+
     const codeTimeline = gsap.timeline({ delay: 1.6 });
     document.querySelectorAll(".code-line").forEach((line, i) => {
       gsap.set(line, { scaleX: 0 });
@@ -754,112 +757,125 @@
       }, i * 0.1);
     });
 
-    // --- Floating code symbols: continuous drift ---
-    document.querySelectorAll(".float-sym").forEach((sym, i) => {
-      const delay = 2.2 + i * 0.35;
+    // --- Floating code symbols: skip on mobile for performance ---
+    if (!isMobileDevice) {
+      document.querySelectorAll(".float-sym").forEach((sym, i) => {
+        const delay = 2.2 + i * 0.35;
 
-      // Fade in
-      gsap.to(sym, {
-        opacity: 0.25 + Math.random() * 0.2,
-        duration: 0.8,
-        delay,
-        ease: "power2.out",
+        gsap.to(sym, {
+          opacity: 0.25 + Math.random() * 0.2,
+          duration: 0.8,
+          delay,
+          ease: "power2.out",
+        });
+
+        gsap.to(sym, {
+          y: -20 - Math.random() * 30,
+          x: (Math.random() - 0.5) * 20,
+          duration: 4 + Math.random() * 3,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay,
+        });
       });
+    }
 
-      // Continuous float loop
-      gsap.to(sym, {
-        y: -20 - Math.random() * 30,
-        x: (Math.random() - 0.5) * 20,
-        duration: 4 + Math.random() * 3,
+    // --- Head bob: skip on mobile ---
+    if (!isMobileDevice) {
+      gsap.to(".coder__head", {
+        y: -2,
+        duration: 3,
         ease: "sine.inOut",
         repeat: -1,
         yoyo: true,
-        delay,
+        delay: 2,
       });
-    });
+    }
 
-    // --- Head bob ---
-    gsap.to(".coder__head", {
-      y: -2,
-      duration: 3,
-      ease: "sine.inOut",
-      repeat: -1,
-      yoyo: true,
-      delay: 2,
-    });
-
-    // --- Tech logos: staggered entrance + continuous float ---
+    // --- Tech logos: skip continuous animations on mobile ---
     const logos = document.querySelectorAll(".tech-logo");
-    logos.forEach((logo, i) => {
-      const angle = (i / logos.length) * Math.PI * 2;
-      const fromX = Math.cos(angle) * 40;
-      const fromY = Math.sin(angle) * 40;
+    if (!isMobileDevice) {
+      logos.forEach((logo, i) => {
+        const angle = (i / logos.length) * Math.PI * 2;
+        const fromX = Math.cos(angle) * 40;
+        const fromY = Math.sin(angle) * 40;
 
-      // Entrance from radial direction
-      gsap.fromTo(logo,
-        { opacity: 0, x: fromX, y: fromY, scale: 0.6 },
-        { opacity: 0.55, x: 0, y: 0, scale: 1, duration: 1, ease: "power3.out", delay: 1.8 + i * 0.12 }
-      );
+        gsap.fromTo(logo,
+          { opacity: 0, x: fromX, y: fromY, scale: 0.6 },
+          { opacity: 0.55, x: 0, y: 0, scale: 1, duration: 1, ease: "power3.out", delay: 1.8 + i * 0.12 }
+        );
 
-      // Continuous float
-      const floatDuration = 5 + Math.random() * 4;
-      gsap.to(logo, {
-        y: -8 - Math.random() * 16,
-        x: (Math.random() - 0.5) * 10,
-        duration: floatDuration,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-        delay: 2.5 + i * 0.2,
+        const floatDuration = 5 + Math.random() * 4;
+        gsap.to(logo, {
+          y: -8 - Math.random() * 16,
+          x: (Math.random() - 0.5) * 10,
+          duration: floatDuration,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: 2.5 + i * 0.2,
+        });
+
+        gsap.to(logo, {
+          rotation: (Math.random() - 0.5) * 8,
+          duration: floatDuration * 1.3,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: 2.5 + i * 0.15,
+        });
       });
-
-      // Subtle rotation
-      gsap.to(logo, {
-        rotation: (Math.random() - 0.5) * 8,
-        duration: floatDuration * 1.3,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-        delay: 2.5 + i * 0.15,
+    } else {
+      // On mobile: just fade logos in statically
+      logos.forEach((logo, i) => {
+        gsap.to(logo, {
+          opacity: 0.4,
+          duration: 0.6,
+          delay: 1.5 + i * 0.08,
+          ease: "power2.out",
+        });
       });
-    });
+    }
 
-    // --- Hero scroll parallax (layered depth) ---
-    gsap.to(".hero__fg", {
-      y: -100,
-      opacity: 0,
-      scrollTrigger: { trigger: ".hero", start: "40% top", end: "90% top", scrub: true },
-    });
-
-    gsap.to(".hero__scene", {
-      y: 60,
-      opacity: 0,
-      scale: 0.9,
-      scrollTrigger: { trigger: ".hero", start: "50% top", end: "bottom top", scrub: true },
-    });
-
-    gsap.to(".hero__bg-layer", {
-      scale: 1.1,
-      opacity: 0.2,
-      scrollTrigger: { trigger: ".hero", start: "40% top", end: "bottom top", scrub: true },
-    });
-
-    gsap.to(".float-sym", {
-      y: -50,
-      scrollTrigger: { trigger: ".hero", start: "20% top", end: "bottom top", scrub: true },
-    });
-
-    // Logos scatter outward on scroll
-    logos.forEach((logo, i) => {
-      const direction = i % 2 === 0 ? -1 : 1;
-      gsap.to(logo, {
-        y: -30 - Math.random() * 40,
-        x: direction * (20 + Math.random() * 30),
+    // --- Hero scroll parallax (desktop only — mobile gets simple fade) ---
+    if (!isMobileDevice) {
+      gsap.to(".hero__fg", {
+        y: -100,
         opacity: 0,
-        scale: 0.7,
-        scrollTrigger: { trigger: ".hero", start: "30% top", end: "90% top", scrub: true },
+        scrollTrigger: { trigger: ".hero", start: "40% top", end: "90% top", scrub: true },
       });
-    });
+
+      gsap.to(".hero__scene", {
+        y: 60,
+        opacity: 0,
+        scale: 0.9,
+        scrollTrigger: { trigger: ".hero", start: "50% top", end: "bottom top", scrub: true },
+      });
+
+      gsap.to(".hero__bg-layer", {
+        scale: 1.1,
+        opacity: 0.2,
+        scrollTrigger: { trigger: ".hero", start: "40% top", end: "bottom top", scrub: true },
+      });
+
+      gsap.to(".float-sym", {
+        y: -50,
+        scrollTrigger: { trigger: ".hero", start: "20% top", end: "bottom top", scrub: true },
+      });
+
+      // Logos scatter outward on scroll
+      logos.forEach((logo, i) => {
+        const direction = i % 2 === 0 ? -1 : 1;
+        gsap.to(logo, {
+          y: -30 - Math.random() * 40,
+          x: direction * (20 + Math.random() * 30),
+          opacity: 0,
+          scale: 0.7,
+          scrollTrigger: { trigger: ".hero", start: "30% top", end: "90% top", scrub: true },
+        });
+      });
+    }
 
     // --- STATEMENT: word-by-word scrub reveal ---
     document.querySelectorAll(".statement").forEach((section) => {
