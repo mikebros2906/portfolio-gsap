@@ -691,6 +691,7 @@ body.cursor-hover .cursor-ring {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 400;
+  font-style: italic;
 }
 
 .hero__sub {
@@ -2299,6 +2300,67 @@ body.cursor-hover .cursor-ring {
    Pauses heavy animations, reduces sizes, improves performance.
    Desktop remains completely untouched.
    ================================================================ */
+
+/* Mobile banner — hidden on desktop */
+.mobile-banner {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .mobile-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9500;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: var(--fm);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.5s var(--e), transform 0.5s var(--e);
+  }
+
+  .mobile-banner.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-banner.hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+  }
+
+  .mobile-banner__text {
+    flex: 1;
+  }
+
+  .mobile-banner__close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 14px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+
+  .mobile-banner__close:hover {
+    background: rgba(255, 255, 255, 0.35);
+  }
+}
 
 @media (max-width: 860px) {
 

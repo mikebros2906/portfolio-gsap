@@ -1298,6 +1298,27 @@
         initThemeToggle();
         initAnimations();
         ScrollTrigger.refresh();
+
+        // Show mobile banner after loader (mobile only)
+        const mobileBanner = document.getElementById("mobileBanner");
+        const bannerClose = document.getElementById("mobileBannerClose");
+
+        if (mobileBanner && innerWidth <= 860) {
+          setTimeout(() => mobileBanner.classList.add("visible"), 800);
+
+          bannerClose.addEventListener("click", () => {
+            mobileBanner.classList.add("hidden");
+            mobileBanner.classList.remove("visible");
+          });
+
+          // Auto-dismiss after 6 seconds
+          setTimeout(() => {
+            if (!mobileBanner.classList.contains("hidden")) {
+              mobileBanner.classList.add("hidden");
+              mobileBanner.classList.remove("visible");
+            }
+          }, 6000);
+        }
       });
     })
     .catch((error) => {
