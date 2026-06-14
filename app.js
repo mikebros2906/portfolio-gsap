@@ -433,6 +433,36 @@
       showExp(0);
     }
 
+    // --- Experience: render ALL cards for mobile ---
+    const expMobileList = document.getElementById("expMobileList");
+    if (expMobileList) {
+      const mobileLabel = '<span class="sec-label" style="margin-bottom:32px;">02 / Experience</span>';
+      const mobileTitle = '<h2 class="sec-title" style="margin-bottom:40px;">Where I\'ve <em>worked.</em></h2>';
+      let mobileHTML = mobileLabel + mobileTitle;
+
+      (data.experience || []).forEach((exp) => {
+        const highlights = (exp.highlights || [])
+          .map((h) => `<li>${esc(h)}</li>`)
+          .join("");
+
+        const tags = (exp.tags || [])
+          .map((t) => `<span class="tag">${esc(t)}</span>`)
+          .join("");
+
+        mobileHTML += `
+          <div class="exp-mobile-card">
+            <div class="exp-mobile-card__dates">${esc(dateRange(exp.start, exp.end))}</div>
+            <h3 class="exp-mobile-card__role">${esc(exp.title)}</h3>
+            <div class="exp-mobile-card__company">${esc(exp.company)}</div>
+            <div class="exp-mobile-card__location">${esc(exp.location || "")}</div>
+            <ul class="exp-mobile-card__highlights">${highlights}</ul>
+            <div class="tags">${tags}</div>
+          </div>`;
+      });
+
+      expMobileList.innerHTML = mobileHTML;
+    }
+
     // --- Projects: render cards with 3D tilt ---
     const projectsGrid = document.getElementById("projectsGrid");
     (data.projects || []).forEach((project, index) => {
@@ -981,6 +1011,18 @@
             showExp(index);
           }
         },
+      });
+    });
+
+    // --- MOBILE EXPERIENCE CARDS: staggered reveal ---
+    gsap.utils.toArray(".exp-mobile-card").forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" },
+        delay: i * 0.06,
       });
     });
 
