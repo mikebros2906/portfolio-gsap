@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Somik Chowdhury — Portfolio</title>
+  <meta
+    name="description"
+    content="Data Analyst, ML Engineer & Web Developer — Dublin, Ireland."
+  />
+
+  <!-- Google Fonts: Syne (display), DM Sans (body), IBM Plex Mono (labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============================================================
+       GLOBAL OVERLAY LAYERS
+       Fixed elements that sit behind or on top of all content.
+       ============================================================ -->
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="particles" id="particles" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       LOADER
+       Full-screen overlay shown during initial data fetch.
+       JS splits the name into chars and animates them.
+       ============================================================ -->
+  <div class="loader" id="loader">
+    <div class="loader__col">
+      <div class="loader__name" id="loaderName"></div>
+      <div class="loader__row">
+        <div class="loader__bar">
+          <div class="loader__fill" id="loaderFill"></div>
+        </div>
+        <span class="loader__pct" id="loaderPct">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       NAVIGATION
+       Fixed navbar — hidden initially, appears after hero scroll.
+       Contains section links, theme toggle, and mobile burger.
+       ============================================================ -->
+  <header class="nav" id="nav">
+    <a href="#hero" class="nav__brand magnetic">
+      <span class="nav__monogram">SC</span>
+      <span class="nav__pulse"></span>
+    </a>
+
+    <nav class="nav__menu" id="navMenu">
+      <a href="#about" class="nav__link magnetic" data-section="about">About</a>
+      <a href="#experience" class="nav__link magnetic" data-section="experience">Experience</a>
+      <a href="#projects" class="nav__link magnetic" data-section="projects">Projects</a>
+      <a href="#skills" class="nav__link magnetic" data-section="skills">Skills</a>
+      <a href="#education" class="nav__link magnetic" data-section="education">Education</a>
+      <a href="#certifications" class="nav__link magnetic" data-section="certifications">Certs</a>
+      <a href="#contact" class="nav__link nav__link--cta magnetic" data-section="contact">Contact</a>
+    </nav>
+
+    <!-- Day/Night theme toggle -->
+    <button
+      class="theme-toggle magnetic"
+      id="themeToggle"
+      aria-label="Toggle theme"
+      title="Toggle theme"
+    >
+      <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      </svg>
+      <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+    </button>
+
+    <!-- Mobile hamburger -->
+    <button class="nav__toggle" id="navToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- ============================================================
+       SECTION 1: HERO — Full viewport takeover
+       Three layers: background (grid + glows), mid (coder SVG +
+       tech logos), foreground (name + CTA).
+       ============================================================ -->
+  <section class="hero" id="hero">
+    <!-- Layer 0: Background grid and ambient glows -->
+    <div class="hero__bg-layer" aria-hidden="true">
+      <div class="hero__grid"></div>
+      <div class="hero__glow hero__glow--1"></div>
+      <div class="hero__glow hero__glow--2"></div>
+    </div>
+
+    <!-- Layer 1: Coder SVG illustration (background depth) -->
+    <div class="hero__scene" id="heroScene" aria-hidden="true">
+      <svg
+        class="coder-svg"
+        viewBox="0 0 520 480"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="scrGlow" cx="50%" cy="35%" r="50%">
+            <stop offset="0%" stop-color="#d4804a" stop-opacity=".12" />
+            <stop offset="100%" stop-color="#d4804a" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="scrGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#161620" />
+            <stop offset="100%" stop-color="#111118" />
+          </linearGradient>
+        </defs>
+
+        <!-- Screen glow aura -->
+        <ellipse class="coder__glow" cx="260" cy="150" rx="220" ry="160" fill="url(#scrGlow)" />
+
+        <!-- Desk -->
+        <rect class="coder__desk" x="60" y="340" width="400" height="14" rx="4" fill="#1a1916" stroke="rgba(238,233,224,.06)" />
+        <rect x="90" y="354" width="6" height="80" rx="2" fill="#1a1916" opacity=".5" />
+        <rect x="424" y="354" width="6" height="80" rx="2" fill="#1a1916" opacity=".5" />
+
+        <!-- Monitor stand + base -->
+        <rect x="242" y="295" width="36" height="45" rx="3" fill="#1c1c22" stroke="rgba(238,233,224,.05)" />
+        <rect x="220" y="332" width="80" height="8" rx="4" fill="#1c1c22" stroke="rgba(238,233,224,.05)" />
+
+        <!-- Monitor body + screen -->
+        <rect class="coder__monitor" x="110" y="80" width="300" height="215" rx="10" fill="#1c1c22" stroke="rgba(238,233,224,.08)" stroke-width="1.5" />
+        <rect x="120" y="90" width="280" height="195" rx="6" fill="url(#scrGrad)" />
+
+        <!-- Code lines on screen (animated by GSAP scaleX) -->
+        <g class="coder__code">
+          <rect class="code-line" x="135" y="108" width="90"  height="5" rx="2.5" fill="#d4804a" opacity=".7" />
+          <rect class="code-line" x="135" y="120" width="140" height="5" rx="2.5" fill="#a09889" opacity=".4" />
+          <rect class="code-line" x="150" y="132" width="110" height="5" rx="2.5" fill="#6a9fd8" opacity=".5" />
+          <rect class="code-line" x="150" y="144" width="160" height="5" rx="2.5" fill="#a09889" opacity=".35" />
+          <rect class="code-line" x="150" y="156" width="80"  height="5" rx="2.5" fill="#7ac87a" opacity=".5" />
+          <rect class="code-line" x="135" y="168" width="120" height="5" rx="2.5" fill="#a09889" opacity=".4" />
+          <rect class="code-line" x="150" y="180" width="170" height="5" rx="2.5" fill="#d4804a" opacity=".5" />
+          <rect class="code-line" x="150" y="192" width="100" height="5" rx="2.5" fill="#6a9fd8" opacity=".4" />
+          <rect class="code-line" x="150" y="204" width="130" height="5" rx="2.5" fill="#a09889" opacity=".35" />
+          <rect class="code-line" x="135" y="216" width="85"  height="5" rx="2.5" fill="#7ac87a" opacity=".45" />
+          <rect class="code-line" x="135" y="228" width="150" height="5" rx="2.5" fill="#a09889" opacity=".4" />
+          <rect class="code-line" x="150" y="240" width="60"  height="5" rx="2.5" fill="#d4804a" opacity=".5" />
+          <!-- Blinking typing cursor -->
+          <rect class="coder__cursor" x="200" y="240" width="8" height="5.5" rx="1" fill="#d4804a" />
+        </g>
+
+        <!-- Person (body, shoulders, head, hair, arms) -->
+        <path class="coder__body" d="M280 280C280 280 310 310 310 340L220 340C220 310 250 280 250 280Z" fill="#1e1e24" stroke="rgba(238,233,224,.05)" />
+        <ellipse cx="265" cy="278" rx="48" ry="18" fill="#1e1e24" stroke="rgba(238,233,224,.05)" />
+        <circle class="coder__head" cx="265" cy="248" r="26" fill="#2a2a32" stroke="rgba(238,233,224,.06)" />
+        <path d="M241 238Q245 220 265 218Q285 220 289 238Q289 230 265 228Q241 230 241 238Z" fill="#1a1a1f" />
+        <path d="M218 290Q190 310 185 330Q183 336 188 336L200 336Q205 320 225 305" fill="none" stroke="#1e1e24" stroke-width="12" stroke-linecap="round" />
+        <path d="M312 290Q340 310 345 330Q347 336 342 336L330 336Q325 320 305 305" fill="none" stroke="#1e1e24" stroke-width="12" stroke-linecap="round" />
+
+        <!-- Keyboard -->
+        <rect x="175" y="330" width="170" height="10" rx="4" fill="#18181e" stroke="rgba(238,233,224,.06)" />
+
+        <!-- Coffee mug with steam -->
+        <g class="coder__mug">
+          <rect x="390" y="312" width="22" height="28" rx="4" fill="#1e1e24" stroke="rgba(238,233,224,.08)" />
+          <path d="M412 320Q422 320 422 328Q422 336 412 336" fill="none" stroke="rgba(238,233,224,.06)" stroke-width="1.5" />
+          <path class="coder__steam" d="M396 310Q394 300 398 292" fill="none" stroke="rgba(212,128,74,.18)" stroke-width="1.2" stroke-linecap="round" />
+          <path class="coder__steam coder__steam--2" d="M402 308Q404 296 400 288" fill="none" stroke="rgba(212,128,74,.13)" stroke-width="1" stroke-linecap="round" />
+          <path class="coder__steam coder__steam--3" d="M408 310Q406 298 410 290" fill="none" stroke="rgba(212,128,74,.15)" stroke-width="1.1" stroke-linecap="round" />
+        </g>
+
+        <!-- Desk plant -->
+        <g class="coder__plant">
+          <rect x="72" y="310" width="20" height="30" rx="4" fill="#1a1916" stroke="rgba(238,233,224,.05)" />
+          <path d="M82 310Q78 290 72 280Q80 285 82 295" fill="#2d5a3a" opacity=".6" />
+          <path d="M82 308Q86 285 92 275Q84 282 82 295" fill="#3a7a4a" opacity=".5" />
+        </g>
+
+        <!-- Floating code symbols (GSAP animated) -->
+        <text class="float-sym" x="80"  y="160" font-family="monospace" font-size="14" fill="#d4804a" opacity="0">&lt;/&gt;</text>
+        <text class="float-sym" x="430" y="130" font-family="monospace" font-size="12" fill="#6a9fd8" opacity="0">{ }</text>
+        <text class="float-sym" x="60"  y="240" font-family="monospace" font-size="11" fill="#7ac87a" opacity="0">/**</text>
+        <text class="float-sym" x="440" y="230" font-family="monospace" font-size="13" fill="#e8b87a" opacity="0">( )</text>
+        <text class="float-sym" x="100" y="100" font-family="monospace" font-size="10" fill="#a09889" opacity="0">=&gt;</text>
+        <text class="float-sym" x="420" y="70"  font-family="monospace" font-size="11" fill="#d4804a" opacity="0">[]</text>
+      </svg>
+    </div>
+
+    <!-- Layer 2: Floating tech logos orbiting the hero -->
+    <div class="hero__logos" id="heroLogos" aria-hidden="true">
+      <div class="tech-logo tl--1" data-label="Python">
+        <svg viewBox="0 0 32 32"><path d="M15.9 2c-1.5 0-2.9.1-4.1.4C8.4 3.1 7.7 4.7 7.7 6.9v2.8h8.4v.9H6.3C4.1 10.6 2 12 2 16c0 4 2.1 5.4 4.3 5.4h2.6v-3.2c0-2.5 2.1-4.6 4.6-4.6h7.9c2 0 3.6-1.7 3.6-3.7V6.9c0-2-1.7-3.5-3.7-3.9C19.8 2.3 17.8 2 15.9 2zm-4.3 2.9c.7 0 1.3.6 1.3 1.4 0 .7-.6 1.3-1.3 1.3-.8 0-1.4-.6-1.4-1.3 0-.8.6-1.4 1.4-1.4z" fill="#3776AB"/><path d="M24.7 10.6v3c0 2.5-2.2 4.8-4.6 4.8h-7.9c-2 0-3.6 1.7-3.6 3.7v3.1c0 2 1.8 3.2 3.7 3.7 2.3.6 4.5.7 7.2 0 1.8-.5 3.5-1.5 3.5-3.7v-2.8h-8.4v-.9H25c2.2 0 3-1.6 3.5-3.1.6-1.6.5-3.2 0-5.4-.4-1.5-1.3-2.4-2.3-2.4h-1.5zm-4.8 12.5c.8 0 1.4.6 1.4 1.3 0 .8-.6 1.4-1.4 1.4-.7 0-1.3-.6-1.3-1.4 0-.7.6-1.3 1.3-1.3z" fill="#FFD43B"/></svg>
+      </div>
+      <div class="tech-logo tl--2" data-label="Java">
+        <svg viewBox="0 0 32 32"><path d="M11.6 24.4s-1.3.8.9 1c2.7.3 4.1.3 7-.3 0 0 .8.5 1.9.9-6.7 2.9-15.2-.2-9.8-1.6zm-.8-3.7s-1.5 1.1.8 1.3c2.9.3 5.2.3 9.1-.4 0 0 .5.5 1.3.8-8.1 2.4-17.2.2-11.2-1.7z" fill="#5382A1"/><path d="M18.3 14.2c1.5 1.7-.4 3.3-.4 3.3s3.8-2 2.1-4.4c-1.7-2.3-3-3.4 4-7.3 0 0-10.9 2.7-5.7 8.4z" fill="#E76F00"/><path d="M25.3 26.7s1 .8-1.1 1.4c-3.8 1.1-15.9 1.4-19.3 0-1.2-.5 1.1-1.2 1.8-1.4.8-.1 1.2-.1 1.2-.1-1.4-1-8.9 1.9-3.8 2.7 13.8 2.2 25.2-1 21.2-2.6zM12.3 17.3s-6.3 1.5-2.2 2.1c1.7.2 5.1.2 8.3-.1 2.6-.2 5.2-.7 5.2-.7s-.9.4-1.6.9c-6.4 1.7-18.7.9-15.2-.8 3-1.5 5.5-1.4 5.5-1.4zm11.3 6.3c6.5-3.4 3.5-6.6 1.4-6.2-.5.1-.7.2-.7.2s.2-.3.6-.4c4-1.4 7.2 4.2-1.4 6.4 0 0 .1-.1.1 0z" fill="#5382A1"/><path d="M19.5 2s3.6 3.6-3.4 9.1c-5.6 4.4-1.3 6.9 0 9.8-3.3-3-5.7-5.6-4.1-8.1 2.4-3.6 9-5.3 7.5-10.8z" fill="#E76F00"/></svg>
+      </div>
+      <div class="tech-logo tl--3" data-label="JavaScript">
+        <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="2" fill="#F7DF1E"/><path d="M20.8 24.3c.6 1 1.4 1.8 2.8 1.8 1.2 0 1.9-.6 1.9-1.4 0-1-.8-1.3-2.1-1.9l-.7-.3c-2.1-.9-3.4-2-3.4-4.3 0-2.2 1.6-3.8 4.2-3.8 1.8 0 3.1.6 4 2.3l-2.2 1.4c-.5-.9-1-1.2-1.8-1.2-.8 0-1.3.5-1.3 1.2 0 .8.5 1.1 1.7 1.6l.7.3c2.4 1 3.8 2.1 3.8 4.5 0 2.6-2 4-4.7 4-2.6 0-4.3-1.3-5.1-2.9l2.2-1.3zM8.4 24.5c.5.8.9 1.5 1.9 1.5 1 0 1.6-.4 1.6-1.9v-10h2.8v10c0 3.1-1.8 4.5-4.5 4.5-2.4 0-3.8-1.2-4.5-2.7l2.7-1.4z" fill="#323330"/></svg>
+      </div>
+      <div class="tech-logo tl--4" data-label="SQL">
+        <svg viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="12" ry="5" fill="none" stroke="#4479A1" stroke-width="2"/><path d="M4 7v18c0 2.8 5.4 5 12 5s12-2.2 12-5V7" fill="none" stroke="#4479A1" stroke-width="2"/><ellipse cx="16" cy="16" rx="12" ry="5" fill="none" stroke="#4479A1" stroke-width="1.5" opacity=".4"/><text x="16" y="20" text-anchor="middle" font-family="monospace" font-weight="700" font-size="8" fill="#4479A1">SQL</text></svg>
+      </div>
+      <div class="tech-logo tl--5" data-label="TensorFlow">
+        <svg viewBox="0 0 32 32"><path d="M16 2L4 8.7v14.6L16 30l12-6.7V8.7L16 2zm0 2.3l9.6 5.4-9.6 5.3V9.7zm-1.2 12.3l-8.4-4.7v9.3l8.4 4.7v-9.3zm2.4 0v9.3l8.4-4.7v-9.3l-8.4 4.7z" fill="#FF6F00"/></svg>
+      </div>
+      <div class="tech-logo tl--6" data-label="Git">
+        <svg viewBox="0 0 32 32"><path d="M31.4 14.6L17.4.6c-.8-.8-2-.8-2.8 0l-2.9 2.9 3.7 3.7c.9-.3 1.9-.1 2.5.6.7.7.8 1.7.5 2.5l3.5 3.5c.9-.3 1.9-.1 2.5.6 1 1 1 2.5 0 3.5s-2.5 1-3.5 0c-.7-.7-.8-1.7-.5-2.6l-3.3-3.3v8.7c.2.1.5.3.7.5 1 1 1 2.5 0 3.5s-2.5 1-3.5 0-1-2.5 0-3.5c.2-.2.5-.4.8-.5V11c-.3-.1-.5-.3-.8-.5-.7-.7-.8-1.7-.5-2.6L10.4 4.2.6 14c-.8.8-.8 2 0 2.8l14 14c.8.8 2 .8 2.8 0l14-14c.8-.8.8-2 0-2.8z" fill="#F05032"/></svg>
+      </div>
+      <div class="tech-logo tl--7" data-label="Tableau">
+        <svg viewBox="0 0 32 32"><path d="M16.5 2.5v5h-1v-5h1zm6 5.5h5v1h-5v-1zm-13 0h5v1h-5v-1zm7 1v5h-1v-5h1zm6.5 4.5h5v1h-5v-1zM4 13.5h5v1H4v-1zm8.5.5v5h-1v-5h1zm7 0v5h-1v-5h1zm-3.5 1v3h-1v-3h1zM16.5 22v5h-1v-5h1zm-6-1v3h-1v-3h1zm12 0v3h-1v-3h1zm-12.5 4h5v1H10v-1zm8 0h5v1h-5v-1z" fill="#E97627" stroke="#E97627" stroke-width=".5"/></svg>
+      </div>
+      <div class="tech-logo tl--8" data-label="HTML">
+        <svg viewBox="0 0 32 32"><path d="M5.9 27.5L4 4h24l-1.9 23.5L16 30" fill="#E44D26"/><path d="M16 27.8l7.3-2L25 6.3H16" fill="#F16529"/><path d="M16 14h-4l-.3-3H16V8H8.6l.1 1 .8 9H16v-4zm0 6.4l-4-1.1-.3-3h-3l.5 5.3 6.8 1.9" fill="#EBEBEB"/><path d="M16 14v3h3.7l-.4 4-3.3.9v3.1l6.4-1.8.1-.6.7-7.5.1-1.1H16zm0-6v3h7.1l.1-.6.2-1.7.1-.7H16z" fill="#fff"/></svg>
+      </div>
+      <div class="tech-logo tl--9" data-label="CSS">
+        <svg viewBox="0 0 32 32"><path d="M5.9 27.5L4 4h24l-1.9 23.5L16 30" fill="#1572B6"/><path d="M16 27.8l7.3-2L25 6.3H16" fill="#33A9DC"/><path d="M16 14h4l.3-3H16V8h7.4l-.1 1-.8 9H16v-4zm0 6.4l4-1.1.3-3h3l-.5 5.3-6.8 1.9" fill="#fff"/><path d="M16 14v3h-3.7l.4 4 3.3.9v3.1l-6.4-1.8-.1-.6-.7-7.5-.1-1.1H16zm0-6v3H8.9l-.1-.6-.2-1.7-.1-.7H16z" fill="#EBEBEB"/></svg>
+      </div>
+      <div class="tech-logo tl--10" data-label="pandas">
+        <svg viewBox="0 0 32 32"><rect x="10" y="2" width="4" height="9" rx="1" fill="#130754"/><rect x="10" y="13" width="4" height="9" rx="1" fill="#130754"/><rect x="18" y="6" width="4" height="9" rx="1" fill="#130754"/><rect x="18" y="17" width="4" height="9" rx="1" fill="#130754"/><rect x="6" y="14" width="20" height="3" rx="1" fill="#E70488"/></svg>
+      </div>
+      <div class="tech-logo tl--11" data-label="Jupyter">
+        <svg viewBox="0 0 32 32"><circle cx="9" cy="6" r="2.5" fill="#F37726"/><circle cx="24" cy="26" r="1.8" fill="#989898"/><circle cx="6" cy="25" r="2" fill="#F37726"/><path d="M26 10.5c0 6.5-4.5 11.5-10 11.5S6 17 6 10.5" fill="none" stroke="#767677" stroke-width="1.3"/><path d="M6 20c0-6.5 4.5-11.5 10-11.5s10 5 10 11.5" fill="none" stroke="#F37726" stroke-width="1.3"/></svg>
+      </div>
+      <div class="tech-logo tl--12" data-label="Hadoop">
+        <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#66CCFF" stroke-width="1.5" opacity=".4"/><path d="M9 10l3 5-3 5M15 10l-3 5 3 5M17 10l3 5-3 5M23 10l-3 5 3 5" fill="none" stroke="#66CCFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><text x="16" y="27" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="4" fill="#66CCFF" opacity=".7">HADOOP</text></svg>
+      </div>
+    </div>
+
+    <!-- Layer 3: Foreground content (name, CTA, socials) -->
+    <div class="hero__fg">
+      <p class="hero__tag" id="heroTag"></p>
+      <h1 class="hero__title" id="heroTitle"></h1>
+      <p class="hero__sub" id="heroSub"></p>
+      <div class="hero__actions">
+        <a href="#projects" class="btn btn--fill magnetic">
+          <span>View Work</span>
+          <span class="btn__arrow">→</span>
+        </a>
+        <a href="#contact" class="btn btn--outline magnetic">
+          <span>Get in Touch</span>
+        </a>
+      </div>
+      <div class="hero__socials" id="heroSocials"></div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero__scroll" id="heroScroll">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2: STATEMENT — Full viewport callout
+       Word-by-word scrub reveal as user scrolls through.
+       ============================================================ -->
+  <section class="statement" id="statement1">
+    <p class="statement__text" id="statementText">
+      I turn <em>complex data</em> into products that <em>people actually use.</em>
+    </p>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3: ABOUT — Pinned word-by-word reveal
+       Left: animated orb with orbiting rings.
+       Right: summary text that lights up word by word on scroll.
+       ============================================================ -->
+  <section class="about" id="about">
+    <div class="about__pin">
+      <div class="about__left">
+        <div class="about__orb-wrap">
+          <div class="about__orb"></div>
+          <div class="about__ring about__ring--1"></div>
+          <div class="about__ring about__ring--2"></div>
+          <div class="about__ring about__ring--3"></div>
+        </div>
+      </div>
+      <div class="about__right">
+        <span class="sec-label anim-label">01 / About</span>
+        <div class="about__text" id="aboutText"></div>
+        <div class="about__langs" id="aboutLangs"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MARQUEE — Infinite scrolling skill ticker with arrow buttons
+       ============================================================ -->
+  <div class="marquee" aria-hidden="true">
+    <button class="marquee__btn marquee__btn--left" aria-label="Scroll left">‹</button>
+    <div class="marquee__overflow">
+      <div class="marquee__track" id="marqueeTrack"></div>
+    </div>
+    <button class="marquee__btn marquee__btn--right" aria-label="Scroll right">›</button>
+  </div>
+
+  <!-- ============================================================
+       SECTION 4: EXPERIENCE — GTA VI-style pinned reveal
+       Single card that swaps content per role as user scrolls.
+       Counter in corner shows current/total (01/05).
+       ============================================================ -->
+  <section class="experience" id="experience">
+    <div class="experience__pin">
+      <div class="experience__counter">
+        <span class="experience__idx" id="expIdx">01</span>
+        <span class="experience__sep">/</span>
+        <span class="experience__total" id="expTotal">05</span>
+      </div>
+      <div class="experience__card" id="expCard">
+        <span class="sec-label">02 / Experience</span>
+        <div class="experience__dates" id="expDates"></div>
+        <h2 class="experience__role" id="expRole"></h2>
+        <div class="experience__company" id="expCompany"></div>
+        <div class="experience__location" id="expLocation"></div>
+        <ul class="experience__highlights" id="expHighlights"></ul>
+        <div class="experience__tags" id="expTags"></div>
+      </div>
+      <div class="experience__progress">
+        <div class="experience__progress-fill" id="expProgressFill"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT 2 -->
+  <section class="statement statement--alt" id="statement2">
+    <p class="statement__text" id="statementText2">
+      From <em>ML pipelines</em> to <em>interactive dashboards</em> — I ship the full stack.
+    </p>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5: PROJECTS — Grid of cards with 3D tilt on hover
+       ============================================================ -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <span class="sec-label anim-label">03 / Projects</span>
+      <h2 class="sec-title anim-title">Selected <em>work.</em></h2>
+    </div>
+    <div class="projects__grid container" id="projectsGrid"></div>
+  </section>
+
+  <!-- MARQUEE 2 -->
+  <div class="marquee marquee--rev" aria-hidden="true">
+    <button class="marquee__btn marquee__btn--left" aria-label="Scroll left">‹</button>
+    <div class="marquee__overflow">
+      <div class="marquee__track marquee__track--rev" id="marqueeTrack2"></div>
+    </div>
+    <button class="marquee__btn marquee__btn--right" aria-label="Scroll right">›</button>
+  </div>
+
+  <!-- ============================================================
+       SECTION 6: SKILLS — Pinned category morph
+       Left sidebar: category buttons (auto-switch on scroll).
+       Right: skill chips that animate in/out per category.
+       ============================================================ -->
+  <section class="skills" id="skills">
+    <div class="skills__pin">
+      <div class="skills__sidebar">
+        <span class="sec-label anim-label">04 / Skills</span>
+        <h2 class="sec-title sec-title--sm anim-title">Technical <em>toolkit.</em></h2>
+        <div class="skills__cats" id="skillsCats"></div>
+        <p class="skills__hint">↕ Scroll to browse</p>
+      </div>
+      <div class="skills__display" id="skillsDisplay"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 7: EDUCATION — Card grid
+       ============================================================ -->
+  <section class="education" id="education">
+    <div class="container">
+      <span class="sec-label anim-label">05 / Education</span>
+      <h2 class="sec-title anim-title">Academic <em>path.</em></h2>
+      <div class="edu__list" id="eduList"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 8: CERTIFICATIONS — Card grid
+       ============================================================ -->
+  <section class="certifications" id="certifications">
+    <div class="container">
+      <span class="sec-label anim-label">06 / Certifications</span>
+      <h2 class="sec-title anim-title">Credentials.</h2>
+      <div class="cert__grid" id="certGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 9: CONTACT — Full viewport close
+       Per-character title reveal, contact link buttons.
+       ============================================================ -->
+  <section class="contact" id="contact">
+    <div class="contact__inner">
+      <span class="sec-label anim-label">07 / Contact</span>
+      <h2 class="contact__title" id="contactTitle"></h2>
+      <p class="contact__sub">Open to data, ML & web roles in Dublin and remote.</p>
+      <div class="contact__links" id="contactLinks"></div>
+      <div class="contact__copy">
+        &copy; <span id="footerYear"></span> <span id="footerName"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SCRIPTS
+       GSAP core + ScrollTrigger plugin (CDN), then our app logic.
+       ============================================================ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
