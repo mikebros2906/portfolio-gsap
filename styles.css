@@ -691,7 +691,6 @@ body.cursor-hover .cursor-ring {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 400;
-  font-style: italic;
 }
 
 .hero__sub {
