@@ -691,7 +691,6 @@ body.cursor-hover .cursor-ring {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 400;
-  font-style: italic;
 }
 
 .hero__sub {
@@ -2062,7 +2061,6 @@ body.cursor-hover .cursor-ring {
 
 .contact__title .char.em-char {
   font-weight: 400;
-  font-style: italic;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   -webkit-background-clip: text;
   background-clip: text;

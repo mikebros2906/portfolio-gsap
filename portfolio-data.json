@@ -96,7 +96,13 @@
         "Support Vector Machine (SVM)",
         "Statistical Programming",
         "regression",
-        "R (Programming Language)"
+        "R (Programming Language)",
+        "XGBoost",
+        "SHAP / Model Interpretability",
+        "LSTM",
+        "Convolutional Neural Networks (CNN)",
+        "Transfer Learning",
+        "Model Evaluation (AUROC, Brier Score, Platt Scaling)"
       ]
     },
     {
@@ -132,7 +138,9 @@
         "Machine Learning",
         "Git",
         "Tableau",
-        "Microsoft Power BI"
+        "Microsoft Power BI",
+        "XGBoost",
+        "Deep Learning"
       ]
     }
   ]
@@ -287,6 +295,62 @@
     }
   ],
   "projects": [
+    {
+      "title": "Hospital Readmission Risk Prediction",
+      "start": "2026-05",
+      "end": "2026-06",
+      "associatedWith": "",
+      "highlights": [
+        "Developed an end-to-end ML pipeline achieving AUROC of 0.69 with calibrated probability outputs via Platt Scaling, using the UCI Diabetes 130-US Hospitals dataset (101,766 patient records) and a Brier score of 0.094.",
+        "Used XGBoost's scale_pos_weight parameter to address class imbalance; engineered clinical features including ICD-10 diagnosis groupings, Charlson comorbidity proxies, discharge disposition, and medication change indicators.",
+        "Implemented SHAP explainability with per-patient waterfall plots highlighting top risk drivers (prior inpatient visits, discharge disposition); deployed as an interactive Streamlit app with live risk scoring."
+      ],
+      "skills": [
+        "Python (Programming Language)",
+        "Machine Learning",
+        "XGBoost",
+        "SHAP / Model Interpretability",
+        "Streamlit",
+        "Feature Engineering"
+      ],
+      "links": [
+        {
+          "label": "View GitHub Repository",
+          "url": "https://github.com/mikebros2906/hospital-readmission"
+        },
+        {
+          "label": "Hospital Readmission Risk App",
+          "url": ""
+        }
+      ]
+    },
+    {
+      "title": "Brain Tumor MRI Image and BBC News Text Classification",
+      "start": "2026-03",
+      "end": "2026-05",
+      "associatedWith": "Griffith College Dublin",
+      "highlights": [
+        "Built and benchmarked four deep learning architectures (custom CNN, hyperparameter-tuned CNN, MobileNetV2, ResNet50 transfer learning) for binary brain tumor classification on 3,000 MRI images, achieving up to 98.4% accuracy/F1 with a from-scratch CNN.",
+        "Designed an LSTM-based text classifier with TextVectorization and embedding layers to categorize 2,100+ BBC news articles into 5 topics, reaching 92.5% weighted F1.",
+        "Ensured data integrity through hash-based deduplication and stratified, leak-free train/validation/test splits across both image and text pipelines.",
+        "Applied interpretability methods (CNN feature map visualization, misclassification analysis) to evaluate model behavior beyond standard accuracy metrics."
+      ],
+      "skills": [
+        "Jupyter",
+        "MobileNetV2",
+        "ResNet50",
+        "LSTM",
+        "Convolutional Neural Networks (CNN)",
+        "Deep Learning",
+        "Model Interpretability"
+      ],
+      "links": [
+        {
+          "label": "View GitHub Repository",
+          "url": "https://github.com/mikebros2906/Brain-tumor-and-bbc-text"
+        }
+      ]
+    },
     {
       "title": "Brain Tumor Prediction using Deep Learning",
       "start": "2025-12",
