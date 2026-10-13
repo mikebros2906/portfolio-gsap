@@ -1,643 +1,310 @@
 {
   "profile": {
     "fullName": "Somik Chowdhury",
-    "headline": "Stamp 2 | Web Developer | Python and Java Developer | Data Analyst | ML Engineer",
-    "location": "Dublin, County Dublin, Ireland",
-    "photo": "./assets/images/profile.jpg",
-    "summary": "Currently pursuing a Master of Science in Big Data Management and Analytics at Griffith College Dublin, with an expected graduation in September 2026. Recently completed a Higher Diploma in Science in Computing at the same institution, building a strong academic foundation in computing and analytics.\n\nMost recently contributed to operational efficiency as part of the aircraft appearance team at Sky Handling Partner. Previous roles include customer acquisition at Prou Education Recruitments, where collaboration and sales techniques were applied to achieve team goals. Core competencies span customer service, problem-solving, and technical skills in data mining, pandas, and Tableau. Passionate about leveraging analytics education and technical expertise to support data-driven decision-making.",
+    "headline": "Data Analyst & ML Engineer — MSc Big Data Management and Analytics, Griffith College Dublin. I build end-to-end pipelines: messy raw data in, calibrated and explainable predictions out.",
+    "location": "Dublin, Ireland",
+    "summary": "I'm a data and machine learning engineer based in Dublin, finishing an MSc in Big Data Management and Analytics at Griffith College Dublin after a Higher Diploma in Computing and a BEng in Electronics and Computer Engineering.\n\nMy dissertation, StationSafe, predicts Dublin Bikes station stock-outs an hour ahead from 51M+ rows of historical data, live APIs and weather — XGBoost at 0.975 AUC, explained with SHAP and served through a live Streamlit dashboard. I care about the unglamorous parts that make models trustworthy: clean data, leak-free time splits, calibrated probabilities and honest evaluation.\n\nI've also built streaming pipelines with Kafka, Spark and Cassandra, cloud apps with FastAPI, MongoDB and Azure, and BI dashboards in Tableau and Power BI.",
     "contacts": {
       "email": "somikireland2906@gmail.com",
       "linkedin": "https://www.linkedin.com/in/somikchowdhury",
       "github": "https://github.com/mikebros2906",
       "leetcode": "https://leetcode.com/u/somik_chowdhury/",
-      "address": "Dublin, Ireland 🇮🇪"
+      "kaggle": "https://www.kaggle.com/somikchowdhury"
     }
   },
   "skills": {
-  "categories": [
-    {
-      "id": "soft_skills",
-      "label": "Soft skills",
-      "items": [
-        "Communication",
-        "Leadership",
-        "Teamwork",
-        "Problem Solving",
-        "Critical Thinking",
-        "Customer Service",
-        "Client Relations",
-        "Customer Acquisition",
-        "Team Management",
-        "Project Management",
-        "Project Planning",
-        "Editing",
-        "Articles",
-        "Creative Writing",
-        "Video editor",
-        "Business Intelligence"
-      ]
-    },
-    {
-      "id": "software_tools",
-      "label": "Software tools",
-      "items": [
-        "Jupyter",
-        "Tableau",
-        "Git",
-        "Linux",
-        "LaTeX",
-        "TensorFlow",
-        "Tkinter",
-        "Blender",
-        "Proteus",
-        "Keil uVision",
-        "Cisco Packet tracer",
-        "emu8086 emulator",
-        "Microsoft Power BI",
-        "Streamlit"
-      ]
-    },
-    {
-      "id": "network_security",
-      "label": "Network & security",
-      "items": [
-        "Network Security",
-        "Computer Networking",
-        "Networking",
-        "Wireless Networking",
-        "Network Architecture",
-        "network model",
-        "Cloud Computing"
-      ]
-    },
-    {
-      "id": "databases",
-      "label": "Databases",
-      "items": [
-        "SQL",
-        "Oracle Database",
-        "RDBMS",
-        "Database Administration",
-        "Databases"
-      ]
-    },
-    {
-      "id": "ds_ml",
-      "label": "Data science & machine learning",
-      "items": [
-        "Exploratory Data Analysis",
-        "Data Mining",
-        "Data Analysis",
-        "pandas",
-        "Machine Learning",
-        "Applied Machine Learning",
-        "Machine Learning Algorithms",
-        "Deep Learning",
-        "Support Vector Machine (SVM)",
-        "Statistical Programming",
-        "regression",
-        "R (Programming Language)",
-        "XGBoost",
-        "SHAP / Model Interpretability",
-        "LSTM",
-        "Convolutional Neural Networks (CNN)",
-        "Transfer Learning",
-        "Model Evaluation (AUROC, Brier Score, Platt Scaling)"
-      ]
-    },
-    {
-      "id": "basic_programming",
-      "label": "Basic programming",
-      "items": [
-        "Python (Programming Language)",
-        "Python(basic)",
-        "Java",
-        "Java (Basic)",
-        "JavaFX",
-        "JavaScript",
-        "HTML",
-        "Cascading Style Sheets (CSS)",
-        "PHP",
-        "C (Programming Language)",
-        "Programming",
-        "Object Oriented Design",
-        "Data Structures",
-        "Computer Programming",
-        "Computer Science"
-      ]
-    },
-    {
-      "id": "recently_used",
-      "label": "Featured Skills",
-      "items": [
-        "Python (Programming Language)",
-        "pandas",
-        "SQL",
-        "Jupyter",
-        "Exploratory Data Analysis",
-        "Machine Learning",
-        "Git",
-        "Tableau",
-        "Microsoft Power BI",
-        "XGBoost",
-        "Deep Learning"
-      ]
-    }
-  ]
-},
+    "categories": [
+      {
+        "id": "core",
+        "label": "Core stack",
+        "items": ["Python", "SQL", "pandas", "scikit-learn", "XGBoost", "SHAP", "Apache Spark", "Apache Kafka", "FastAPI", "Streamlit", "Tableau", "Power BI", "Git"]
+      },
+      {
+        "id": "languages",
+        "label": "Languages",
+        "items": ["Python", "SQL", "Java", "JavaScript", "R", "HTML & CSS", "C", "PL/SQL"]
+      },
+      {
+        "id": "ml",
+        "label": "Machine learning",
+        "items": ["scikit-learn", "XGBoost", "Random Forest", "Logistic Regression", "SHAP explainability", "Probability calibration (Platt scaling)", "Class imbalance handling", "Time-series aware validation", "TensorFlow / Keras", "Transfer learning (MobileNetV2, ResNet50)", "YOLOv8", "BiLSTM & DistilBERT", "K-Means clustering"]
+      },
+      {
+        "id": "data_eng",
+        "label": "Data engineering",
+        "items": ["pandas", "NumPy", "Parquet", "Apache Spark", "Apache Kafka", "Apache Cassandra", "Lambda / Kappa architecture", "GitHub Actions (scheduled ingestion)", "REST API ingestion", "Feature engineering", "Data cleaning & imputation"]
+      },
+      {
+        "id": "cloud",
+        "label": "Cloud & backend",
+        "items": ["FastAPI", "MongoDB Atlas", "Firebase Authentication", "Azure Blob Storage", "Oracle Database", "Streamlit Community Cloud", "Netlify"]
+      },
+      {
+        "id": "bi",
+        "label": "BI & analytics",
+        "items": ["Tableau", "Microsoft Power BI", "LOD expressions", "Time-series forecasting", "Exploratory data analysis", "Streamlit dashboards"]
+      },
+      {
+        "id": "tools",
+        "label": "Tools",
+        "items": ["Git & GitHub", "VS Code", "Jupyter", "Google Colab", "Linux (Ubuntu)", "VirtualBox", "LaTeX", "GSAP"]
+      }
+    ]
+  },
   "languages": [
-    {
-      "name": "German",
-      "level": "Elementary"
-    },
-    {
-      "name": "Bengali",
-      "level": "Native or Bilingual"
-    },
-    {
-      "name": "English",
-      "level": "Native or Bilingual"
-    },
-    {
-      "name": "Hindi",
-      "level": "Native or Bilingual"
-    }
+    { "name": "English", "level": "Native or Bilingual" },
+    { "name": "Hindi", "level": "Native or Bilingual" },
+    { "name": "Bengali", "level": "Native or Bilingual" },
+    { "name": "German", "level": "Elementary" }
   ],
-
   "experience": [
     {
       "company": "Sky Handling Partner",
-      "title": "Aircraft appearance",
+      "title": "Aircraft Appearance",
       "start": "2025-06",
       "end": "2025-10",
-      "location": "Dublin, County Dublin, Ireland",
+      "location": "Dublin Airport, Ireland",
       "highlights": [
-        "Contributed to operational efficiency as part of the aircraft appearance team during aircraft turnaround operations."
+        "Prepared aircraft cabins during time-critical turnarounds, working to fixed turnaround windows and airside safety procedures."
       ],
-      "tags": [
-        "Operations",
-        "Teamwork",
-        "Customer Service"
-      ]
+      "tags": ["Operations", "Teamwork", "Working under time pressure"]
     },
     {
       "company": "Prou Education Recruitments",
-      "title": "Customer acquisition and sales",
+      "title": "Customer Acquisition & Sales",
       "start": "2023-02",
       "end": "2023-08",
-      "location": "Bengaluru, Karnataka, India",
+      "location": "Bengaluru, India",
       "highlights": [
-        "Spearheaded customer acquisition efforts, leveraging a range of sales techniques to meet and exceed targets.",
-        "Demonstrated leadership and teamwork skills to effectively manage and contribute to a sales team.",
-        "Utilized problem-solving and client relations skills to provide excellent customer service and build lasting relationships."
+        "Drove customer acquisition through outreach and lead follow-up as part of a sales team.",
+        "Managed client relationships from first contact through to conversion."
       ],
-      "tags": [
-        "Sales",
-        "Client Relations",
-        "Teamwork"
-      ]
+      "tags": ["Sales", "Client Relations", "Communication"]
     },
     {
       "company": "Steel Authority of India Limited",
       "title": "Project Intern",
       "start": "2022-06",
       "end": "2022-07",
-      "location": "Bhilai, Chhattisgarh, India",
+      "location": "Bhilai, India",
       "highlights": [
-        "Designed a GSM-based fire detection system using C++, reducing emergency response time by 40%.",
-        "Collaborated with a 4-member team to integrate real-time SMS alerts, preventing potential property damages."
+        "Built a temperature-sensor fire detection prototype on Arduino that sends SMS alerts over GSM when a threshold is crossed.",
+        "Worked in a four-person team on sensor integration and the alerting logic."
       ],
-      "tags": [
-        "C++",
-        "Arduino",
-        "GSM",
-        "Teamwork"
-      ]
-    },
-    {
-      "company": "Paradox India",
-      "title": "Content writer",
-      "start": "2020-06",
-      "end": "2022-06",
-      "location": "India",
-      "highlights": [
-        "Wrote and edited articles on a variety of topics including science, space, and music.",
-        "Utilized project planning and creative writing skills to produce high-quality content.",
-        "Collaborated with a team to interview and showcase new and emerging artists."
-      ],
-      "tags": [
-        "Writing",
-        "Editing",
-        "Collaboration"
-      ]
+      "tags": ["Arduino", "C/C++", "GSM", "Embedded"]
     },
     {
       "company": "Corizo",
-      "title": "Web Developer Internship",
+      "title": "Web Developer Intern",
       "start": "2022-05",
       "end": "2022-05",
-      "location": "India",
+      "location": "India (remote)",
       "highlights": [
-        "Developed a functional e-commerce website from concept to deployment using HTML, CSS, and JavaScript.",
-        "Implemented core front-end features, enabling users to select items and manage a shopping cart.",
-        "Created an interactive user interface using front-end web development fundamentals.",
-        "Used Git for version control and collaborated effectively within a team."
+        "Built and deployed a working e-commerce front end in HTML, CSS and JavaScript, including product selection and a shopping cart.",
+        "Used Git for version control within a small team."
       ],
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "Git"
-      ]
+      "tags": ["HTML", "CSS", "JavaScript", "Git"]
+    },
+    {
+      "company": "Paradox India",
+      "title": "Content Writer",
+      "start": "2020-06",
+      "end": "2022-06",
+      "location": "India (remote)",
+      "highlights": [
+        "Wrote and edited articles on science, space and music.",
+        "Interviewed and profiled new and emerging artists with the editorial team."
+      ],
+      "tags": ["Writing", "Editing", "Interviewing"]
     }
   ],
   "education": [
     {
       "institution": "Griffith College Dublin",
-      "qualification": "Masters of Science, Big Data Management and Analytics",
+      "qualification": "MSc, Big Data Management and Analytics",
       "start": "2025-09",
       "end": "2026-09",
-      "location": "Dublin, Ireland"
+      "location": "Dublin, Ireland",
+      "note": "Dissertation: StationSafe — predicting Dublin Bikes station stock-outs"
     },
     {
       "institution": "Griffith College Dublin",
-      "qualification": "Higher Diploma, Computing Science",
+      "qualification": "Higher Diploma in Science, Computing",
       "start": "2024-09",
       "end": "2025-09",
       "location": "Dublin, Ireland"
     },
     {
-      "institution": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
-      "qualification": "Bachelor's in Engineering, Electronics and Computer Engineering",
+      "institution": "SRM Institute of Science and Technology, Chennai",
+      "qualification": "BEng, Electronics and Computer Engineering",
       "start": "2019-06",
       "end": "2023-06",
       "location": "Chennai, India"
-    },
-    {
-      "institution": "Delhi Public School, Bokaro Steel City",
-      "qualification": "Schooling",
-      "start": "2004-04",
-      "end": "2019-04",
-      "location": "Bokaro Steel City, India"
-    }
-  ],
-  "volunteering": [
-    {
-      "organization": "National Service Scheme",
-      "role": "Volunteer",
-      "start": "2020-02",
-      "end": "2020-05",
-      "cause": "Environment",
-      "highlights": [
-        "Orchestrated and participated in community development projects including blood donation drives and environmental awareness campaigns; managed a team of 15 volunteers.",
-        "Led a successful tree plantation drive, resulting in the planting of 500+ saplings."
-      ]
     }
   ],
   "projects": [
     {
-      "title": "Hospital Readmission Risk Prediction",
-      "start": "2026-05",
-      "end": "2026-06",
+      "title": "StationSafe — Dublin Bikes Stock-Out Prediction",
+      "featured": true,
+      "start": "2026",
+      "associatedWith": "MSc Dissertation, Griffith College Dublin",
+      "metrics": ["AUC-ROC 0.975", "Recall 94.6%", "51M+ rows", "3 models benchmarked"],
+      "highlights": [
+        "XGBoost classifier that predicts whether a Dublin Bikes station will run out of bikes or docks within the next hour, evaluated on a held-out 2026 test set.",
+        "Built the data pipeline from 66 raw CSVs across two schema eras: a station ID crosswalk (116 of ~120 stations matched), Parquet conversion cutting ~4–5 GB to ~300–500 MB, and 37 time-aware features.",
+        "Used a chronological split (train 2019–24, validate 2025, test 2026) to avoid temporal leakage; XGBoost (0.975) beat Random Forest (0.970) and Logistic Regression (0.947). Chose class weights over SMOTE given 5.6M training rows.",
+        "Live Streamlit dashboard with SHAP per-prediction explanations, JCDecaux and Open-Meteo feeds, and a GitHub Actions job collecting live station data every 15 minutes."
+      ],
+      "skills": ["XGBoost", "SHAP", "pandas", "Parquet", "Streamlit", "GitHub Actions"],
+      "links": []
+    },
+    {
+      "title": "Hospital Readmission Risk Predictor",
+      "start": "2026",
       "associatedWith": "",
+      "metrics": ["AUROC 0.688", "Brier 0.094"],
       "highlights": [
-        "Developed an end-to-end ML pipeline achieving AUROC of 0.69 with calibrated probability outputs via Platt Scaling, using the UCI Diabetes 130-US Hospitals dataset (101,766 patient records) and a Brier score of 0.094.",
-        "Used XGBoost's scale_pos_weight parameter to address class imbalance; engineered clinical features including ICD-10 diagnosis groupings, Charlson comorbidity proxies, discharge disposition, and medication change indicators.",
-        "Implemented SHAP explainability with per-patient waterfall plots highlighting top risk drivers (prior inpatient visits, discharge disposition); deployed as an interactive Streamlit app with live risk scoring."
+        "Predicts hospital readmission risk on the UCI Diabetes 130-US dataset with XGBoost, Platt-scaled probabilities and SHAP explanations, deployed on Streamlit Cloud. Focus on calibrated, explainable risk scores rather than headline accuracy."
       ],
-      "skills": [
-        "Python (Programming Language)",
-        "Machine Learning",
-        "XGBoost",
-        "SHAP / Model Interpretability",
-        "Streamlit",
-        "Feature Engineering"
-      ],
+      "skills": ["XGBoost", "Calibration", "SHAP", "Streamlit"],
       "links": [
-        {
-          "label": "View GitHub Repository",
-          "url": "https://github.com/mikebros2906/hospital-readmission"
-        },
-        {
-          "label": "Hospital Readmission Risk App",
-          "url": ""
-        }
+        { "label": "GitHub", "url": "https://github.com/mikebros2906/hospital-readmission" }
       ]
     },
     {
-      "title": "Brain Tumor MRI Image and BBC News Text Classification",
-      "start": "2026-03",
-      "end": "2026-05",
+      "title": "Real-Time Traffic Streaming Pipeline",
       "associatedWith": "Griffith College Dublin",
+      "metrics": ["Kafka 3.9", "Spark 4.1", "Cassandra 5.0"],
       "highlights": [
-        "Built and benchmarked four deep learning architectures (custom CNN, hyperparameter-tuned CNN, MobileNetV2, ResNet50 transfer learning) for binary brain tumor classification on 3,000 MRI images, achieving up to 98.4% accuracy/F1 with a from-scratch CNN.",
-        "Designed an LSTM-based text classifier with TextVectorization and embedding layers to categorize 2,100+ BBC news articles into 5 topics, reaching 92.5% weighted F1.",
-        "Ensured data integrity through hash-based deduplication and stratified, leak-free train/validation/test splits across both image and text pipelines.",
-        "Applied interpretability methods (CNN feature map visualization, misclassification analysis) to evaluate model behavior beyond standard accuracy metrics."
+        "Built a Lambda/Kappa speed layer streaming M50 motorway traffic data through Kafka into Spark and Cassandra on an Ubuntu VM; fixed a Spark 4.1 connector incompatibility by moving to the Scala 2.13 builds."
       ],
-      "skills": [
-        "Jupyter",
-        "MobileNetV2",
-        "ResNet50",
-        "LSTM",
-        "Convolutional Neural Networks (CNN)",
-        "Deep Learning",
-        "Model Interpretability"
-      ],
-      "links": [
-        {
-          "label": "View GitHub Repository",
-          "url": "https://github.com/mikebros2906/Brain-tumor-and-bbc-text"
-        }
-      ]
+      "skills": ["Apache Kafka", "Apache Spark", "Cassandra", "Linux"],
+      "links": []
     },
     {
-      "title": "Brain Tumor Prediction using Deep Learning",
+      "title": "Brain Tumour Detection with YOLOv8",
       "start": "2025-12",
       "end": "2026-03",
       "associatedWith": "",
       "highlights": [
-        "Deployed a Streamlit dashboard for brain MRI tumor detection using YOLOv8, returning tumor type + bounding-box localization with confidence scores.",
-        "Built the full ML pipeline: YOLO-format data prep, transfer-learning training/evaluation, and production weight export for inference.",
-        "Productionized the app on Streamlit Community Cloud via GitHub with reproducible dependencies and a stable model-loading setup."
+        "Streamlit app for brain MRI tumour detection with YOLOv8, returning tumour type and bounding-box localisation with confidence scores. Full pipeline from YOLO-format data prep and transfer-learning training to deployed inference."
       ],
-      "skills": [
-        "Deep Learning",
-        "Python (Programming Language)",
-        "Machine Learning",
-        "Streamlit"
-      ],
+      "skills": ["YOLOv8", "Deep Learning", "Python", "Streamlit"],
       "links": [
-        {
-          "label": "View GitHub Repository",
-          "url": "https://github.com/mikebros2906/Brain-Tumor-Prediction"
-        },
-        {
-          "label": "Open Streamlit App",
-          "url": "https://brain-tumor-prediction-somik-chowdhury.streamlit.app/"
-        }
+        { "label": "GitHub", "url": "https://github.com/mikebros2906/Brain-Tumor-Prediction" },
+        { "label": "Live app", "url": "https://brain-tumor-prediction-somik-chowdhury.streamlit.app/" }
       ]
     },
     {
-      "title": "Melbourne Housing Data Analysis using Jupyter",
+      "title": "Medical Condition Classification & Patient Profiling",
       "start": "2025-10",
       "end": "2025-12",
       "associatedWith": "Griffith College Dublin",
+      "metrics": ["Accuracy 0.912", "Macro-F1 0.897"],
       "highlights": [
-        "Analyzed and provided insights for the Melbourne Housing dataset.",
-        "Managed 35,000+ data points by imputing missing values and resolving outliers where necessary.",
-        "Identified focus areas for sales strategy based on exploratory analysis."
+        "CRISP-DM pipeline predicting 7 medical conditions from clinical and lifestyle factors: multinomial logistic regression benchmarked against a tuned Random Forest (GridSearchCV, stratified k-fold), plus K-Means patient segmentation."
       ],
-      "skills": [
-        "Data Analysis",
-        "Jupyter",
-        "Exploratory Data Analysis"
-      ],
-      "links": []
+      "skills": ["scikit-learn", "Logistic Regression", "Random Forest", "K-Means"],
+      "links": [
+        { "label": "GitHub", "url": "https://github.com/mikebros2906/Medical-Condition-Classification-and-Patient-Profiling-Using-Clinical-and-Lifestyle-Data" },
+        { "label": "Kaggle", "url": "https://www.kaggle.com/code/somikchowdhury/medical-condition-classification" }
+      ]
     },
     {
-      "title": "Predicting medical conditions of patients using real time data",
-      "start": "2025-10",
-      "end": "2025-12",
+      "title": "Social Media Web App on Azure",
       "associatedWith": "Griffith College Dublin",
       "highlights": [
-        "Built an end-to-end ML pipeline to predict 7 medical conditions using demographic, clinical, and lifestyle risk factors (CRISP-DM).",
-        "Preprocessed data (missing values, IQR outlier capping, encoding/scaling) and trained Multinomial Logistic Regression; benchmarked against tuned Random Forest (GridSearchCV + StratifiedKFold, macro-F1).",
-        "Added KMeans patient segmentation for profiling; achieved 0.912 test accuracy and 0.897 macro-F1."
+        "Twitter-style app built with FastAPI and MongoDB Atlas, using Firebase Authentication for sign-in and Azure Blob Storage for media uploads."
       ],
-      "skills": [
-        "Jupyter",
-        "Applied Machine Learning",
-        "Exploratory Data Analysis"
-      ],
-      "links": [
-        {
-          "label": "View GitHub Repository",
-          "url": "https://github.com/mikebros2906/Medical-Condition-Classification-and-Patient-Profiling-Using-Clinical-and-Lifestyle-Data"
-        },
-        {
-          "label": "Kaggle Notebook",
-          "url": "https://www.kaggle.com/code/somikchowdhury/medical-condition-classification"
-        }
-      ]
+      "skills": ["FastAPI", "MongoDB", "Firebase", "Azure Blob Storage"],
+      "links": []
     },
     {
-      "title": "Breast Cancer prediction model using ML",
-      "start": "2025-08",
-      "end": "2025-09",
-      "associatedWith": "",
-      "highlights": [
-        "Developed a breast cancer prediction model in Python using Support Vector Machine (SVM) from scikit-learn.",
-        "Performed data collection, cleaning, and standardization on a dataset with 500+ entries; implemented a train-test split for evaluation.",
-        "Built a predictive system to classify breast cancer as benign or malignant based on diagnostic data."
-      ],
-      "skills": [
-        "Applied Machine Learning",
-        "Support Vector Machine (SVM)",
-        "Data Analysis",
-        "Jupyter"
-      ],
-      "links": [
-        {
-          "label": "View GitHub Repository",
-          "url": "https://github.com/mikebros2906/Cancer-prediction-using-ML"
-        }
-      ]
-    },
-    {
-      "title": "Wordle game using Java",
-      "start": "2024-10",
-      "end": "2024-12",
+      "title": "E-Commerce Analytics Dashboards",
       "associatedWith": "Griffith College Dublin",
+      "metrics": ["14 dashboards"],
       "highlights": [
-        "Built a console-based Wordle game in Java with input validation, scoring, and attempt tracking.",
-        "Implemented letter marking, regex validation, and menu-driven gameplay to enhance user experience.",
-        "Applied OOP principles for modular design and code reusability.",
-        "Integrated a website UI for scoring using JavaScript."
+        "Tableau analysis of the Olist Brazilian e-commerce dataset: 10 exploratory dashboards and 4 predictive ones using linear regression, time-series forecasting and LOD expressions."
       ],
-      "skills": [
-        "Java",
-        "Git",
-        "Programming"
-      ],
-      "links": [
-        {
-          "label": "View GitHub Repository",
-          "url": "https://github.com/mikebros2906/Wordle-Game"
-        }
-      ]
-    },
-    {
-      "title": "Automated Fault detection system for Distillation Columns using ML",
-      "start": "2023-01",
-      "end": "2023-05",
-      "associatedWith": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
-      "highlights": [
-        "Developed an automated fault detection system for distillation columns using gamma scanning data and FFT for quantitative analysis.",
-        "Built a Python GUI to process real-world data from Bhabha Atomic Research Centre (B.A.R.C.), reducing manual evaluation.",
-        "Implemented ratio-based comparison with an error margin to predict uneven liquid distribution; matched a completed case study."
-      ],
-      "skills": [
-        "Applied Machine Learning",
-        "Machine Learning Algorithms"
-      ],
+      "skills": ["Tableau", "Forecasting", "Regression"],
       "links": []
     },
     {
-      "title": "Hospital Management system using SQL",
-      "start": "2022-09",
-      "end": "2022-11",
-      "associatedWith": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
-      "highlights": [
-        "Engineered a hospital management system using Oracle SQL/PLSQL, focusing on normalization and relational schema modeling.",
-        "Automated patient registration, billing, and staff workflows using stored procedures, triggers, and role-based access control.",
-        "Optimized performance with indexes, sequences, and cursors for scalable and reliable transactions."
-      ],
-      "skills": [
-        "SQL",
-        "Database Administration",
-        "Oracle Database"
-      ],
-      "links": []
-    },
-    {
-      "title": "Underwater Fish Recognition using Deep learning",
+      "title": "Underwater Fish Recognition",
       "start": "2022-07",
       "end": "2022-11",
-      "associatedWith": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
+      "associatedWith": "SRM Institute of Science and Technology",
+      "metrics": ["97.41% test accuracy"],
       "highlights": [
-        "Built a fish recognition model using pre-trained MobileNetV2 CNN; achieved 97.41% test accuracy on 9 fish species.",
-        "Used NumPy, pandas, scikit-learn, TensorFlow, and Keras for preprocessing, training, and testing.",
-        "Improved image quality via scaling, cropping, and filtering to boost feature reliability."
+        "Fine-tuned a pre-trained MobileNetV2 CNN to classify 9 fish species, with image preprocessing (scaling, cropping, filtering) in TensorFlow and Keras."
       ],
-      "skills": [
-        "Deep Learning",
-        "Applied Machine Learning",
-        "TensorFlow"
-      ],
+      "skills": ["TensorFlow", "Keras", "Transfer Learning"],
       "links": []
     },
     {
-      "title": "Password based door-lock system in 8051 using Proteus & Keil uVision5",
-      "start": "2022-03",
-      "end": "2022-05",
-      "associatedWith": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
+      "title": "Fault Detection for Distillation Columns",
+      "start": "2023-01",
+      "end": "2023-05",
+      "associatedWith": "SRM Institute of Science and Technology · data from BARC",
       "highlights": [
-        "Designed and simulated a password-based door-lock system using an 8051 microcontroller.",
-        "Developed C code in Keil uVision5 to handle password verification, keypad input, and control a door motor and LCD.",
-        "Validated functionality using Proteus simulation to grant/deny access based on a five-digit password."
+        "Python GUI that analyses gamma-scan data from the Bhabha Atomic Research Centre using FFT and ratio-based comparison to flag uneven liquid distribution, replacing manual evaluation; results matched a completed case study."
       ],
-      "skills": [
-        "Proteus",
-        "Keil uVision",
-        "C (Programming Language)"
-      ],
-      "links": []
-    },
-    {
-      "title": "Fire detector using GSM",
-      "start": "2022-06",
-      "end": "2022-07",
-      "associatedWith": "Steel Authority of India Limited",
-      "highlights": [
-        "Built a temperature-sensor based fire detection concept using GSM and C language to detect temperature rise and send alerts to phones."
-      ],
-      "skills": [
-        "Arduino",
-        "Git",
-        "Programming"
-      ],
-      "links": []
-    },
-    {
-      "title": "Tic-Tac-Toe Game Simulation using Emu8086 Software",
-      "start": "2021-09",
-      "end": "2021-11",
-      "associatedWith": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
-      "highlights": [
-        "Developed a two-player Tic-Tac-Toe game using assembly language in the Emu8086 emulator.",
-        "Implemented game logic for player turns, win conditions (horizontal, vertical, diagonal), and tie games.",
-        "Used emulator features to simulate CPU, RAM, and display for a functional 3x3 grid game."
-      ],
-      "skills": [
-        "emu8086 emulator",
-        "Assembly Language"
-      ],
-      "links": []
-    },
-    {
-      "title": "IoT Applications in Smart Home using Cisco Packet Tracer",
-      "start": "2021-04",
-      "end": "2021-06",
-      "associatedWith": "SRMIST, Kattankulathur, Chennai, Tamil Nadu",
-      "highlights": [
-        "Built an IoT smart home setup in Cisco Packet Tracer integrating a home gateway, smartphone, and smart devices.",
-        "Implemented automation: carbon detection alarm, motion-detecting webcam trigger, humidity-controlled fan, and temperature-based siren.",
-        "Configured interconnected devices for autonomous operation to improve home security, comfort, and energy efficiency."
-      ],
-      "skills": [
-        "Internet of Things (IoT)",
-        "Cisco Packet Tracer"
-      ],
+      "skills": ["Python", "FFT", "Signal Processing", "GUI"],
       "links": []
     }
   ],
+  "archive": [
+    { "title": "Room booking app (FastAPI + MongoDB)", "year": "2025", "context": "Griffith College Dublin" },
+    { "title": "Breast cancer classifier (SVM)", "year": "2025", "context": "Personal", "url": "https://github.com/mikebros2906/Cancer-prediction-using-ML" },
+    { "title": "Melbourne housing EDA", "year": "2025", "context": "Griffith College Dublin" },
+    { "title": "Wordle in Java", "year": "2024", "context": "Griffith College Dublin", "url": "https://github.com/mikebros2906/Wordle-Game" },
+    { "title": "Hospital management system (Oracle SQL / PL-SQL)", "year": "2022", "context": "SRM IST" },
+    { "title": "Password door lock on 8051 (C, Proteus)", "year": "2022", "context": "SRM IST" },
+    { "title": "Tic-tac-toe in 8086 assembly", "year": "2021", "context": "SRM IST" },
+    { "title": "IoT smart home (Cisco Packet Tracer)", "year": "2021", "context": "SRM IST" }
+  ],
   "certifications": [
-  {
-    "title": "Power BI Essential Training",
-    "issuer": "National Association of State Boards of Accountancy (NASBA)",
-    "issued": "January 2026",
-    "credentialId": "",
-    "credentialUrl": "https://www.linkedin.com/learning/certificates/20724e78785c8751ec8554c69ce8d0542470e02e09a0c5d139f3cada8bf81677?trk=share_certificate",
-    "skills": ["Microsoft Power BI", "Business Intelligence"]
-  },
-  {
-    "title": "Machine Learning with Python: Foundations",
-    "issuer": "LinkedIn Learning Community",
-    "issued": "June 2025",
-    "credentialId": "851ae228b2caf6e0fccc209b062741cdccf4f498c8c317050b4f5dc16c7c4f3e",
-    "credentialUrl": "https://www.linkedin.com/learning/certificates/851ae228b2caf6e0fccc209b062741cdccf4f498c8c317050b4f5dc16c7c4f3e?u=2189292",
-    "skills": ["Machine Learning", "Python (Programming Language)"]
-  },
-  {
-    "title": "Java (Basic)",
-    "issuer": "HackerRank",
-    "issued": "May 2025",
-    "credentialId": "F45B1CAB2FDD",
-    "credentialUrl": "https://www.hackerrank.com/certificates/f45b1cab2fdd",
-    "skills": ["Java", "Problem Solving", "Computer Science", "Programming", "Computer Programming"]
-  },
-  {
-    "title": "Python (Basic)",
-    "issuer": "HackerRank",
-    "issued": "November 2024",
-    "credentialId": "D4ECDDB3B5C19",
-    "credentialUrl": "https://www.hackerrank.com/certificates/d4ecdd3b5c19",
-    "skills": ["Programming", "Problem Solving", "Computer Science", "Python (Programming Language)"]
-  },
-  {
-    "title": "Bits and Bytes of Computer Networking",
-    "issuer": "Google",
-    "issued": "April 2022",
-    "credentialId": "PDZTH7BPEHH5",
-    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/PDZTH7BPEHH5",
-    "skills": ["Wireless Networking", "Networking", "Network Security", "Computer Networking", "Cloud Computing", "Problem Solving"]
-  },
-  {
-    "title": "SQL for Data Science",
-    "issuer": "University of California, Davis",
-    "issued": "March 2022",
-    "credentialId": "82HGDKJ466DT",
-    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/82HGDKJ466DT",
-    "skills": ["Programming", "SQL", "Data Analysis"]
-  },
-  {
-    "title": "Applied Machine Learning in Python",
-    "issuer": "University of Michigan",
-    "issued": "September 2021",
-    "credentialId": "Q4N89CBKNFB2",
-    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/Q4N89CBKNFB2",
-    "skills": ["Machine Learning", "Programming", "Data Analysis", "Algorithms", "Regression", "Python (Programming Language)"]
-  }
-]
+    {
+      "title": "Power BI Essential Training",
+      "issuer": "LinkedIn Learning",
+      "issued": "January 2026",
+      "credentialUrl": "https://www.linkedin.com/learning/certificates/20724e78785c8751ec8554c69ce8d0542470e02e09a0c5d139f3cada8bf81677?trk=share_certificate"
+    },
+    {
+      "title": "Machine Learning with Python: Foundations",
+      "issuer": "LinkedIn Learning",
+      "issued": "June 2025",
+      "credentialUrl": "https://www.linkedin.com/learning/certificates/851ae228b2caf6e0fccc209b062741cdccf4f498c8c317050b4f5dc16c7c4f3e?u=2189292"
+    },
+    {
+      "title": "Java (Basic)",
+      "issuer": "HackerRank",
+      "issued": "May 2025",
+      "credentialUrl": "https://www.hackerrank.com/certificates/f45b1cab2fdd"
+    },
+    {
+      "title": "Python (Basic)",
+      "issuer": "HackerRank",
+      "issued": "November 2024",
+      "credentialUrl": "https://www.hackerrank.com/certificates/d4ecdd3b5c19"
+    },
+    {
+      "title": "The Bits and Bytes of Computer Networking",
+      "issuer": "Google",
+      "issued": "April 2022",
+      "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/PDZTH7BPEHH5"
+    },
+    {
+      "title": "SQL for Data Science",
+      "issuer": "University of California, Davis",
+      "issued": "March 2022",
+      "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/82HGDKJ466DT"
+    },
+    {
+      "title": "Applied Machine Learning in Python",
+      "issuer": "University of Michigan",
+      "issued": "September 2021",
+      "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/Q4N89CBKNFB2"
+    }
+  ]
 }
