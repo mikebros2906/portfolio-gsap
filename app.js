@@ -18,7 +18,7 @@
 (() => {
   "use strict";
 
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 
   /* ================================================================
@@ -1248,6 +1248,48 @@
 
 
   /* ================================================================
+     SMOOTH IN-PAGE NAVIGATION
+     Every link to "#section" (nav, logo, hero buttons) glides to its
+     target instead of jumping. Duration scales with distance so short
+     hops feel quick and long ones don't drag. Scrolling the wheel
+     mid-animation cancels it (autoKill), so the visitor stays in control.
+     ================================================================ */
+
+  function initSmoothAnchors() {
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.addEventListener("click", (e) => {
+      const link = e.target.closest('a[href^="#"]');
+      if (!link) return;
+
+      const id = link.getAttribute("href").slice(1);
+      const target = id && document.getElementById(id);
+      if (!target) return;
+
+      e.preventDefault();
+
+      // Pinned sections start their animation exactly at "top top",
+      // so land on the section's true top with no offset.
+      const y = id === "hero" ? 0 : target.getBoundingClientRect().top + window.scrollY;
+      const distance = Math.abs(y - window.scrollY);
+
+      if (reduceMotion) {
+        window.scrollTo(0, y);
+      } else {
+        gsap.to(window, {
+          scrollTo: { y, autoKill: true },
+          duration: Math.min(1.8, Math.max(0.7, distance / 4000)),
+          ease: "power3.inOut",
+          overwrite: true,
+        });
+      }
+
+      try { history.replaceState(null, "", `#${id}`); } catch (err) { /* ignore */ }
+    });
+  }
+
+
+  /* ================================================================
      CONTACT FORM
      Posts to Netlify Forms via fetch so the visitor stays on the page.
      Netlify stores each submission and emails a notification.
@@ -1426,6 +1468,7 @@
         initTilt();
         initThemeToggle();
         initContactForm();
+        initSmoothAnchors();
         initAnimations();
         ScrollTrigger.refresh();
 
