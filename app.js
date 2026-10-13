@@ -1,303 +1,1464 @@
+/**
+ * ================================================================
+ * SOMIK CHOWDHURY — GSAP SCROLL PORTFOLIO
+ *
+ * Architecture:
+ * 1. Theme system (localStorage persistence)
+ * 2. Helper functions (escaping, date formatting, icons)
+ * 3. Interactive systems (cursor, magnetic, particles, 3D tilt)
+ * 4. Data rendering (JSON → DOM)
+ * 5. GSAP animation controller (ScrollTrigger-based)
+ * 6. Loader sequence
+ * 7. Boot chain
+ *
+ * All content is fetched from portfolio-data.json at runtime.
+ * ================================================================
+ */
+
 (() => {
+  "use strict";
+
   gsap.registerPlugin(ScrollTrigger);
-  const esc=(s="")=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const fmtDate=s=>{if(!s)return"";const[y,m]=s.split("-");const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return m?`${M[+m-1]} ${y}`:y};
-  const range=(a,b)=>{const s=fmtDate(a),e=b?fmtDate(b):"Present";return s===e?s:`${s} — ${e}`};
-  const splitC=(t,em)=>{let h="";for(const c of t)h+=c===" "?'<span class="char space"></span>':`<span class="char">${esc(c)}</span>`;if(em)for(const c of em)h+=c===" "?'<span class="char space em-char"></span>':`<span class="char em-char">${esc(c)}</span>`;return h};
-  const ICO={
-    email:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
-    linkedin:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5 1.78 1.78 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>',
-    github:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.2.9 2.3v3.3c0 .3.1.7.8.6A12 12 0 0012 .3"/></svg>',
-    leetcode:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M13.5 2L4 12l9.5 10M20 12H9"/></svg>',
-    kaggle:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.8 23.6c-.03.1-.12.14-.27.14h-3.06c-.18 0-.34-.08-.47-.24L9.9 16.9l-1.44 1.38v4.92c0 .22-.11.33-.33.33H5.75c-.22 0-.33-.11-.33-.33V.6c0-.22.11-.33.33-.33h2.38c.22 0 .33.11.33.33v14.2l6.1-6.17c.13-.13.28-.2.45-.2h3.18c.14 0 .23.06.27.17.04.13.03.22-.04.28l-6.43 6.23 6.72 8.24c.09.08.1.17.06.27z"/></svg>',
-    loc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>'
+
+
+  /* ================================================================
+     1. THEME SYSTEM
+     Reads saved preference from localStorage on load.
+     Toggle button swaps data-theme on <html> and saves.
+     ================================================================ */
+
+  const THEME_KEY = "sc-portfolio-theme";
+  const root = document.documentElement;
+
+  // Apply saved theme immediately (prevents flash)
+  let savedTheme = null;
+  try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) { /* storage blocked */ }
+  if (savedTheme) {
+    root.setAttribute("data-theme", savedTheme);
+  }
+
+  /**
+   * Initializes the theme toggle button click handler.
+   */
+  function initThemeToggle() {
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* storage blocked */ }
+
+      // Elastic bounce feedback on the button
+      gsap.fromTo(
+        btn,
+        { scale: 0.85 },
+        { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.4)" }
+      );
+    });
+  }
+
+
+  /* ================================================================
+     2. HELPER FUNCTIONS
+     ================================================================ */
+
+  /**
+   * Escapes HTML special characters to prevent XSS.
+   * @param {string} str - Raw string
+   * @returns {string} - Safe HTML string
+   */
+  function esc(str = "") {
+    return String(str).replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    }[char]));
+  }
+
+  /**
+   * Formats an ISO date string (YYYY-MM) into "Mon YYYY".
+   * @param {string} dateStr - e.g. "2024-01"
+   * @returns {string} - e.g. "Jan 2024"
+   */
+  function fmtDate(dateStr) {
+    if (!dateStr) return "";
+    const [year, month] = dateStr.split("-");
+    const MONTHS = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+    return month ? `${MONTHS[+month - 1]} ${year}` : year;
+  }
+
+  /**
+   * Formats a date range as "Start — End" or "Start — Present".
+   */
+  function dateRange(start, end) {
+    const s = fmtDate(start);
+    const e = end ? fmtDate(end) : "Present";
+    return s === e ? s : `${s} — ${e}`;
+  }
+
+  /**
+   * Splits text into per-character <span> elements for GSAP animation.
+   * @param {string} text - Regular text
+   * @param {string} [emText] - Text to render with .em-char class
+   * @returns {string} - HTML string
+   */
+  function splitChars(text, emText) {
+    let html = "";
+
+    for (const char of text) {
+      html += char === " "
+        ? '<span class="char space"></span>'
+        : `<span class="char">${esc(char)}</span>`;
+    }
+
+    if (emText) {
+      for (const char of emText) {
+        html += char === " "
+          ? '<span class="char space em-char"></span>'
+          : `<span class="char em-char">${esc(char)}</span>`;
+      }
+    }
+
+    return html;
+  }
+
+  /**
+   * SVG icon strings for social links and contact.
+   */
+  const ICONS = {
+    email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">'
+      + '<rect x="2" y="4" width="20" height="16" rx="2"/>'
+      + '<path d="m22 7-10 6L2 7"/></svg>',
+
+    linkedin: '<svg viewBox="0 0 24 24" fill="currentColor">'
+      + '<path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17'
+      + 'A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5 1.78 1.78 0 016.5 8.25z'
+      + 'M19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19V19h-3v-9h2.9v1.3a3.11 3.11'
+      + ' 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>',
+
+    github: '<svg viewBox="0 0 24 24" fill="currentColor">'
+      + '<path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8'
+      + '-1.4-1.8-1-.7.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7'
+      + '-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 016'
+      + ' 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5'
+      + '.4.9 1.2.9 2.3v3.3c0 .3.1.7.8.6A12 12 0 0012 .3"/></svg>',
+
+    leetcode: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">'
+      + '<path d="M13.5 2L4 12l9.5 10M20 12H9"/></svg>',
+
+    kaggle: '<svg viewBox="0 0 24 24" fill="currentColor">'
+      + '<path d="M18.8 23.6c-.03.1-.12.14-.27.14h-3.06c-.18 0-.34-.08-.47-.24L9.9 16.9l-1.44 1.38v4.92'
+      + 'c0 .22-.11.33-.33.33H5.75c-.22 0-.33-.11-.33-.33V.6c0-.22.11-.33.33-.33h2.38c.22 0 .33.11.33.33'
+      + 'v14.2l6.1-6.17c.13-.13.28-.2.45-.2h3.18c.14 0 .23.06.27.17.04.13.03.22-.04.28l-6.43 6.23 6.72 8.24'
+      + 'c.09.08.1.17.06.27z"/></svg>',
+
+    loc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">'
+      + '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>'
+      + '<circle cx="12" cy="9" r="2.5"/></svg>',
   };
 
-  /* ─── CURSOR ─── */
-  function initCursor(){
-    if(matchMedia("(pointer:coarse)").matches||innerWidth<900)return;
-    const d=document.getElementById("cursor"),r=document.getElementById("cursorRing");
-    let cx=0,cy=0,rx=0,ry=0;
-    document.addEventListener("mousemove",e=>{cx=e.clientX;cy=e.clientY;d.style.left=cx+"px";d.style.top=cy+"px"});
-    (function f(){rx+=(cx-rx)*.1;ry+=(cy-ry)*.1;r.style.left=rx+"px";r.style.top=ry+"px";requestAnimationFrame(f)})();
-    const HOV="a,button,.proj-card,.skill-chip,.cert-card,.edu-card,.btn,.about__lang";
-    document.addEventListener("mouseover",e=>{if(e.target.closest(HOV))document.body.classList.add("cursor-hover")});
-    document.addEventListener("mouseout",e=>{if(e.target.closest(HOV)&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest(HOV)))document.body.classList.remove("cursor-hover")});
-  }
 
-  /* ─── MAGNETIC ─── */
-  function initMagnetic(){
-    if(matchMedia("(pointer:coarse)").matches||innerWidth<900)return;
-    document.querySelectorAll(".magnetic").forEach(el=>{
-      el.addEventListener("mousemove",e=>{const r=el.getBoundingClientRect();gsap.to(el,{x:(e.clientX-(r.left+r.width/2))*.2,y:(e.clientY-(r.top+r.height/2))*.2,duration:.4,ease:"power3.out",overwrite:true})});
-      el.addEventListener("mouseleave",()=>gsap.to(el,{x:0,y:0,duration:.5,ease:"power3.out",overwrite:true}));
+  /* ================================================================
+     3. INTERACTIVE SYSTEMS
+     ================================================================ */
+
+  /**
+   * Custom cursor — dot snaps to mouse, ring follows with elastic lag.
+   * Disabled on touch devices.
+   */
+  function initCursor() {
+    if (matchMedia("(pointer: coarse)").matches || innerWidth < 900) return;
+
+    const dot = document.getElementById("cursor");
+    const ring = document.getElementById("cursorRing");
+    let cursorX = 0;
+    let cursorY = 0;
+    let ringX = 0;
+    let ringY = 0;
+
+    // Dot: snap to mouse instantly
+    document.addEventListener("mousemove", (e) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      dot.style.left = `${cursorX}px`;
+      dot.style.top = `${cursorY}px`;
+    });
+
+    // Ring: lerp follow at 10% per frame
+    (function followRing() {
+      ringX += (cursorX - ringX) * 0.1;
+      ringY += (cursorY - ringY) * 0.1;
+      ring.style.left = `${ringX}px`;
+      ring.style.top = `${ringY}px`;
+      requestAnimationFrame(followRing);
+    })();
+
+    // Hover expansion on interactive elements (delegated, so elements
+    // rendered later — skill chips, form fields — also trigger it)
+    const hoverTargets = "a, button, input, textarea, .proj-card, .skill-chip, .exp-card, "
+      + ".cert-card, .edu-card, .btn, .about__lang, .tech-logo";
+
+    document.addEventListener("mouseover", (e) => {
+      if (e.target.closest(hoverTargets)) document.body.classList.add("cursor-hover");
+    });
+    document.addEventListener("mouseout", (e) => {
+      const to = e.relatedTarget;
+      if (e.target.closest(hoverTargets) && !(to && to.closest && to.closest(hoverTargets))) {
+        document.body.classList.remove("cursor-hover");
+      }
     });
   }
 
-  /* ─── PARTICLES ─── */
-  function initParticles(){
-    const c=document.getElementById("particles"),x=c.getContext("2d");let W,H;const ds=[];
-    function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();addEventListener("resize",rs);
-    for(let i=0;i<45;i++)ds.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.2+.3,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,a:Math.random()*.25+.06});
-    (function d(){x.clearRect(0,0,W,H);for(const p of ds){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(212,128,74,${p.a})`;x.fill()}requestAnimationFrame(d)})();
-  }
+  /**
+   * Magnetic hover — elements pull toward cursor by 20% offset.
+   */
+  function initMagnetic() {
+    if (matchMedia("(pointer: coarse)").matches || innerWidth < 900) return;
 
-  /* ─── TILT ─── */
-  function initTilt(){
-    if(matchMedia("(pointer:coarse)").matches||innerWidth<900)return;
-    document.querySelectorAll("[data-tilt]").forEach(card=>{
-      card.addEventListener("mousemove",e=>{const r=card.getBoundingClientRect();const mx=(e.clientX-r.left)/r.width,my=(e.clientY-r.top)/r.height;card.style.setProperty("--mx",mx*100+"%");card.style.setProperty("--my",my*100+"%");gsap.to(card,{rotateX:(my-.5)*-6,rotateY:(mx-.5)*6,transformPerspective:900,duration:.5,ease:"power2.out",overwrite:true})});
-      card.addEventListener("mouseleave",()=>gsap.to(card,{rotateX:0,rotateY:0,duration:.5,ease:"power3.out",overwrite:true}));
-    });
-  }
+    document.querySelectorAll(".magnetic").forEach((el) => {
+      el.addEventListener("mousemove", (e) => {
+        const rect = el.getBoundingClientRect();
+        const deltaX = e.clientX - (rect.left + rect.width / 2);
+        const deltaY = e.clientY - (rect.top + rect.height / 2);
 
-  /* ─── RENDER ─── */
-  function render(data){
-    const p=data.profile,c=p.contacts;
-    // Loader
-    document.getElementById("loaderName").innerHTML=p.fullName.split("").map(ch=>ch===" "?'<span class="char" style="width:.25em">&nbsp;</span>':`<span class="char">${esc(ch)}</span>`).join("");
-    // Hero title — massive centered chars
-    document.getElementById("heroTag").textContent="Data · ML · Dublin";
-    const parts=p.fullName.split(" "),first=parts[0],last=parts.slice(1).join(" ")+".";
-    let tH='<span class="line">';for(const ch of first)tH+=`<span class="char">${esc(ch)}</span>`;
-    tH+='</span><span class="line"><span class="em-wrap">';for(const ch of last)tH+=ch===" "?'<span class="char space"></span>':`<span class="char">${esc(ch)}</span>`;
-    tH+='</span></span>';
-    document.getElementById("heroTitle").innerHTML=tH;
-    document.getElementById("heroSub").textContent=p.headline;
-    // Socials
-    [c.email&&{href:`mailto:${c.email}`,icon:"email",label:"Email"},c.linkedin&&{href:c.linkedin,icon:"linkedin",label:"LinkedIn"},c.github&&{href:c.github,icon:"github",label:"GitHub"},c.kaggle&&{href:c.kaggle,icon:"kaggle",label:"Kaggle"},c.leetcode&&{href:c.leetcode,icon:"leetcode",label:"LeetCode"}].filter(Boolean).forEach(s=>{
-      document.getElementById("heroSocials").insertAdjacentHTML("beforeend",`<a href="${esc(s.href)}" target="_blank" rel="noopener" aria-label="${s.label}" class="magnetic">${ICO[s.icon]}</a>`);
-    });
-    // Statements — wrap each word, keeping <em> styling intact
-    ["statementText","statementText2"].forEach(id=>{
-      const el=document.getElementById(id);if(!el)return;
-      const out=[];
-      el.childNodes.forEach(n=>{
-        const isEm=n.nodeName==="EM";
-        (n.textContent||"").split(/\s+/).filter(Boolean).forEach(w=>out.push(isEm?`<span class="word"><em>${esc(w)}</em></span>`:`<span class="word">${esc(w)}</span>`));
+        gsap.to(el, {
+          x: deltaX * 0.2,
+          y: deltaY * 0.2,
+          duration: 0.4,
+          ease: "power3.out",
+          overwrite: true,
+        });
       });
-      el.innerHTML=out.join(" ");
+
+      el.addEventListener("mouseleave", () => {
+        gsap.to(el, {
+          x: 0,
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+          overwrite: true,
+        });
+      });
     });
-    // Marquees
-    const allSkills=[...new Set((data.skills?.categories||[]).flatMap(c=>c.items))];
-    const mc=allSkills.map(s=>`<span>${esc(s)}</span>`).join('<span class="sep">◆</span>');
-    const d2=mc+'<span class="sep">◆</span>'+mc;
-    document.getElementById("marqueeTrack").innerHTML=d2;
-    document.getElementById("marqueeTrack2").innerHTML=d2;
-    // About
-    document.getElementById("aboutText").innerHTML=p.summary.split(/\n\s*\n/).map(para=>`<p>${para.trim().split(/\s+/).map(w=>`<span class="word">${esc(w)}</span>`).join(" ")}</p>`).join("");
-    document.getElementById("aboutLangs").innerHTML=(data.languages||[]).map(l=>`<span class="about__lang">${esc(l.name)} · ${esc(l.level)}</span>`).join("");
-    // Experience — store for pinned reveal
-    window.__expData=data.experience||[];
-    document.getElementById("expTotal").textContent=String(window.__expData.length).padStart(2,"0");
-    if(window.__expData.length)showExp(0);
-    // Projects
-    const pg=document.getElementById("projectsGrid");
-    (data.projects||[]).forEach((pr,i)=>{
-      const links=(pr.links||[]).map(l=>`<a class="proj-link magnetic" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("");
-      const skills=(pr.skills||[]).slice(0,6).map(s=>`<span class="tag">${esc(s)}</span>`).join("");
-      const metrics=(pr.metrics||[]).length?`<div class="proj-card__metrics">${pr.metrics.map(m=>`<span>${esc(m)}</span>`).join("")}</div>`:"";
-      const when=pr.start?(pr.end?range(pr.start,pr.end):fmtDate(pr.start)):"";
-      const meta=[pr.associatedWith,when].filter(Boolean).join(" · ");
-      const hl=pr.highlights||[];
-      const body=pr.featured?`<ul class="proj-card__list">${hl.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>`:`<p class="proj-card__desc">${esc(hl[0]||"")}</p>`;
-      pg.insertAdjacentHTML("beforeend",`<article class="proj-card${pr.featured?" proj-card--featured":""}" data-tilt><div class="proj-card__shine"></div><span class="proj-card__num">${pr.featured?"FEATURED":"PROJ"} / ${String(i+1).padStart(2,"0")}</span><h3 class="proj-card__title">${esc(pr.title)}</h3>${meta?`<div class="proj-card__assoc">${esc(meta)}</div>`:""}${metrics}${body}<div class="proj-card__footer"><div class="tags">${skills}</div>${links?`<div class="proj-card__links">${links}</div>`:""}</div></article>`);
-    });
-    const ar=document.getElementById("projectsArchive");
-    if(ar&&(data.archive||[]).length){
-      ar.innerHTML=`<h3 class="archive__title">Earlier &amp; smaller projects</h3><ul class="archive__list">${data.archive.map(a=>{const t=a.url?`<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>`:`<span>${esc(a.title)}</span>`;return `<li>${t}<span class="archive__meta">${esc(a.context||"")} · ${esc(a.year||"")}</span></li>`}).join("")}</ul>`;
+  }
+
+  /**
+   * Canvas particle system — 45 ambient floating dots.
+   */
+  function initParticles() {
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let width;
+    let height;
+    const particles = [];
+    const isMobile = innerWidth < 860;
+    const PARTICLE_COUNT = isMobile ? 15 : 45;
+
+    function resize() {
+      width = canvas.width = innerWidth;
+      height = canvas.height = innerHeight;
     }
-    // Skills
-    const catC=document.getElementById("skillsCats");(data.skills?.categories||[]).forEach((cat,i)=>{const btn=document.createElement("button");btn.className="skill-cat-btn"+(i===0?" active":"");btn.textContent=cat.label;btn.dataset.index=i;catC.appendChild(btn)});
-    switchCat(0);catC.addEventListener("click",e=>{const b=e.target.closest(".skill-cat-btn");if(b)switchCat(+b.dataset.index)});
-    // Education
-    (data.education||[]).forEach(e=>{document.getElementById("eduList").insertAdjacentHTML("beforeend",`<div class="edu-card"><h3 class="edu-card__qual">${esc(e.qualification)}</h3><div class="edu-card__inst">${esc(e.institution)}</div>${e.note?`<p class="edu-card__note">${esc(e.note)}</p>`:""}<div class="edu-card__meta"><span>${esc(range(e.start,e.end))}</span><span>${esc(e.location||"")}</span></div></div>`)});
-    // Certifications
-    (data.certifications||[]).forEach(ct=>{document.getElementById("certGrid").insertAdjacentHTML("beforeend",`<div class="cert-card"><h3 class="cert-card__title">${esc(ct.title)}</h3><div class="cert-card__issuer">${esc(ct.issuer)}</div><span class="cert-card__date">Issued ${esc(ct.issued)}</span>${ct.credentialUrl?`<a class="cert-card__link magnetic" href="${esc(ct.credentialUrl)}" target="_blank" rel="noopener">View credential</a>`:""}</div>`)});
-    // Contact
-    document.getElementById("contactTitle").innerHTML=splitC("Let's ","connect.");
-    [c.email&&{href:`mailto:${c.email}`,label:c.email,icon:"email"},c.linkedin&&{href:c.linkedin,label:"LinkedIn",icon:"linkedin"},c.github&&{href:c.github,label:"GitHub",icon:"github"},c.kaggle&&{href:c.kaggle,label:"Kaggle",icon:"kaggle"},c.leetcode&&{href:c.leetcode,label:"LeetCode",icon:"leetcode"}].filter(Boolean).forEach(l=>{const ext=!l.href.startsWith("mailto:");document.getElementById("contactLinks").insertAdjacentHTML("beforeend",`<a class="contact__link magnetic" href="${esc(l.href)}"${ext?' target="_blank" rel="noopener"':""}>${ICO[l.icon]}<span>${esc(l.label)}</span></a>`)});
-    document.getElementById("contactLinks").insertAdjacentHTML("beforeend",`<span class="contact__link contact__link--static">${ICO.loc}<span>${esc(p.location||"Dublin, Ireland")}</span></span>`);
-    document.getElementById("footerYear").textContent=new Date().getFullYear();
-    document.getElementById("footerName").textContent=p.fullName;
+    resize();
+    addEventListener("resize", resize);
+
+    // Create particles with random properties
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * innerWidth,
+        y: Math.random() * innerHeight,
+        radius: Math.random() * 1.2 + 0.3,
+        velocityX: (Math.random() - 0.5) * 0.15,
+        velocityY: (Math.random() - 0.5) * 0.15,
+        alpha: Math.random() * 0.25 + 0.06,
+      });
+    }
+
+    // Animation loop
+    (function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (const p of particles) {
+        // Update position (wrap at edges)
+        p.x += p.velocityX;
+        p.y += p.velocityY;
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        // Draw
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 128, 74, ${p.alpha})`;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(draw);
+    })();
   }
 
-  /* ─── Experience reveal (GTA VI character-style) ─── */
-  function showExp(idx){
-    const exp=window.__expData;if(!exp||!exp[idx])return;
-    const x=exp[idx];
-    const card=document.getElementById("expCard");
-    // Animate out then in
-    gsap.to(card,{opacity:0,y:20,duration:.3,ease:"power2.in",onComplete:()=>{
-      document.getElementById("expDates").textContent=range(x.start,x.end);
-      document.getElementById("expRole").textContent=x.title;
-      document.getElementById("expCompany").textContent=x.company;
-      document.getElementById("expLocation").textContent=x.location||"";
-      document.getElementById("expHighlights").innerHTML=(x.highlights||[]).map(h=>`<li>${esc(h)}</li>`).join("");
-      document.getElementById("expTags").innerHTML=(x.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
-      document.getElementById("expIdx").textContent=String(idx+1).padStart(2,"0");
-      gsap.fromTo(card,{opacity:0,y:20},{opacity:1,y:0,duration:.6,ease:"power3.out"});
-    }});
-  }
+  /**
+   * 3D tilt effect on project cards — ±6° rotation tracking mouse.
+   */
+  function initTilt() {
+    if (matchMedia("(pointer: coarse)").matches || innerWidth < 900) return;
 
-  /* ─── Skill switch ─── */
-  function switchCat(idx){
-    const cats=window.__portfolioData?.skills?.categories||[];const cat=cats[idx];if(!cat)return;
-    const d=document.getElementById("skillsDisplay"),cc=document.getElementById("skillsCats");
-    cc.querySelectorAll(".skill-cat-btn").forEach((b,j)=>b.classList.toggle("active",j===idx));
-    const old=d.querySelectorAll(".skill-chip");
-    if(old.length){gsap.to(old,{opacity:0,y:8,duration:.2,stagger:.01,ease:"power2.in",onComplete:()=>{d.innerHTML="";addChips(cat.items)}});}else addChips(cat.items);
-  }
-  function addChips(items){
-    const d=document.getElementById("skillsDisplay");
-    items.forEach(item=>d.insertAdjacentHTML("beforeend",`<span class="skill-chip">${esc(item)}</span>`));
-    gsap.fromTo(d.querySelectorAll(".skill-chip"),{opacity:0,y:14},{opacity:1,y:0,duration:.4,stagger:.025,ease:"power3.out"});
-  }
+    document.querySelectorAll("[data-tilt]").forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const normalizedX = (e.clientX - rect.left) / rect.width;
+        const normalizedY = (e.clientY - rect.top) / rect.height;
 
-  /* ─── Scroll spy ─── */
-  function initScrollSpy(){
-    ["about","experience","projects","skills","education","certifications","contact"].forEach(id=>{
-      const el=document.getElementById(id);if(!el)return;
-      ScrollTrigger.create({trigger:el,start:"top 40%",end:"bottom 40%",onToggle:self=>{
-        document.querySelectorAll(".nav__link[data-section]").forEach(l=>l.classList.toggle("active",self.isActive&&l.dataset.section===id));
-      }});
+        // Set CSS variables for the radial shine effect
+        card.style.setProperty("--mx", `${normalizedX * 100}%`);
+        card.style.setProperty("--my", `${normalizedY * 100}%`);
+
+        gsap.to(card, {
+          rotateX: (normalizedY - 0.5) * -6,
+          rotateY: (normalizedX - 0.5) * 6,
+          transformPerspective: 900,
+          duration: 0.5,
+          ease: "power2.out",
+          overwrite: true,
+        });
+      });
+
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.5,
+          ease: "power3.out",
+          overwrite: true,
+        });
+      });
     });
   }
 
-  /* ═══════════ ALL GSAP ANIMATIONS ═══════════ */
-  function initAnimations(){
-    const mm=gsap.matchMedia();
 
-    /* Progress */
-    ScrollTrigger.create({start:0,end:"max",onUpdate:s=>document.getElementById("progress").style.setProperty("--sp",(s.progress*100)+"%")});
+  /* ================================================================
+     4. DATA RENDERING
+     Reads portfolio-data.json and injects HTML into empty containers.
+     ================================================================ */
 
-    /* Nav — hidden initially, appears after hero */
-    ScrollTrigger.create({trigger:".hero",start:"80% top",onEnter:()=>{document.getElementById("nav").classList.add("visible");gsap.to("#nav",{opacity:1,y:0,duration:.6,ease:"power3.out"})},once:true});
-    ScrollTrigger.create({start:30,onUpdate:s=>document.getElementById("nav").classList.toggle("scrolled",s.scroll()>30)});
+  /**
+   * Main render function — populates every section from JSON data.
+   */
+  function render(data) {
+    const profile = data.profile;
+    const contacts = profile.contacts;
 
-    /* ─── HERO — massive centered reveal ─── */
-    const hTl=gsap.timeline({defaults:{ease:"power3.out"}});
-    hTl.to(".hero__title .char",{y:0,opacity:1,duration:1,stagger:.02})
-       .to(".hero__tag",{opacity:1,duration:.6},"-=0.3")
-       .to(".hero__sub",{opacity:1,duration:.6},"-=0.2")
-       .to(".hero__actions",{opacity:1,duration:.6},"-=0.2")
-       .to(".hero__socials",{opacity:1,duration:.6},"-=0.2")
-       .to("#heroScroll",{opacity:1,duration:.5},"-=0.1")
-       .to(".hero__scene",{opacity:.6,y:0,scale:1,duration:1.2,ease:"power3.out"},"-=1.2");
+    // --- Loader: split name into animated chars ---
+    document.getElementById("loaderName").innerHTML = profile.fullName
+      .split("")
+      .map((ch) =>
+        ch === " "
+          ? '<span class="char" style="width:.25em">&nbsp;</span>'
+          : `<span class="char">${esc(ch)}</span>`
+      )
+      .join("");
 
-    /* Coder scene animations */
-    const clTl=gsap.timeline({delay:1.6});
-    document.querySelectorAll(".code-line").forEach((l,i)=>{gsap.set(l,{scaleX:0});clTl.to(l,{scaleX:1,duration:.25+Math.random()*.2,ease:"power2.out"},i*.1)});
-    document.querySelectorAll(".float-sym").forEach((sym,i)=>{
-      gsap.to(sym,{opacity:.25+Math.random()*.2,duration:.8,delay:2.2+i*.35,ease:"power2.out"});
-      gsap.to(sym,{y:-20-Math.random()*30,x:(Math.random()-.5)*20,duration:4+Math.random()*3,ease:"sine.inOut",repeat:-1,yoyo:true,delay:2.2+i*.35});
+    // --- Hero: per-character title ---
+    document.getElementById("heroTag").textContent = "Data · ML · Dublin";
+
+    const nameParts = profile.fullName.split(" ");
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(" ") + ".";
+
+    let titleHTML = '<span class="line">';
+    for (const ch of firstName) {
+      titleHTML += `<span class="char">${esc(ch)}</span>`;
+    }
+    titleHTML += '</span><span class="line"><span class="em-wrap">';
+    for (const ch of lastName) {
+      titleHTML += ch === " "
+        ? '<span class="char space"></span>'
+        : `<span class="char">${esc(ch)}</span>`;
+    }
+    titleHTML += "</span></span>";
+
+    document.getElementById("heroTitle").innerHTML = titleHTML;
+    document.getElementById("heroSub").textContent = profile.headline;
+
+    // --- Hero: social links ---
+    const socialLinks = [
+      contacts.email && { href: `mailto:${contacts.email}`, icon: "email", label: "Email" },
+      contacts.linkedin && { href: contacts.linkedin, icon: "linkedin", label: "LinkedIn" },
+      contacts.github && { href: contacts.github, icon: "github", label: "GitHub" },
+      contacts.kaggle && { href: contacts.kaggle, icon: "kaggle", label: "Kaggle" },
+      contacts.leetcode && { href: contacts.leetcode, icon: "leetcode", label: "LeetCode" },
+    ].filter(Boolean);
+
+    const socialsContainer = document.getElementById("heroSocials");
+    socialLinks.forEach((social) => {
+      socialsContainer.insertAdjacentHTML(
+        "beforeend",
+        `<a href="${esc(social.href)}"${social.href.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'} aria-label="${social.label}" class="magnetic">${ICONS[social.icon]}</a>`
+      );
     });
-    gsap.to(".coder__head",{y:-2,duration:3,ease:"sine.inOut",repeat:-1,yoyo:true,delay:2});
 
-    /* Hero scroll parallax — foreground exits faster than scene */
-    gsap.to(".hero__fg",{y:-100,opacity:0,scrollTrigger:{trigger:".hero",start:"40% top",end:"90% top",scrub:true}});
-    gsap.to(".hero__scene",{y:60,opacity:0,scale:.9,scrollTrigger:{trigger:".hero",start:"50% top",end:"bottom top",scrub:true}});
-    gsap.to(".hero__bg-layer",{scale:1.1,opacity:.2,scrollTrigger:{trigger:".hero",start:"40% top",end:"bottom top",scrub:true}});
-    gsap.to(".float-sym",{y:-50,scrollTrigger:{trigger:".hero",start:"20% top",end:"bottom top",scrub:true}});
+    // --- Statement sections: wrap each word, keeping <em> styling ---
+    ["statementText", "statementText2"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
 
-    /* ─── STATEMENTS — word-by-word scrub reveal ─── */
-    document.querySelectorAll(".statement").forEach(sec=>{
-      const words=sec.querySelectorAll(".word");if(!words.length)return;
-      ScrollTrigger.create({trigger:sec,start:"top bottom",end:"bottom top",scrub:.5,
-        onUpdate:self=>{const lit=Math.ceil(self.progress*2*words.length);words.forEach((w,i)=>w.classList.toggle("lit",i<lit))}
+      const words = [];
+      el.childNodes.forEach((node) => {
+        const isEm = node.nodeName === "EM";
+        (node.textContent || "").split(/\s+/).filter(Boolean).forEach((w) => {
+          words.push(isEm
+            ? `<span class="word"><em>${esc(w)}</em></span>`
+            : `<span class="word">${esc(w)}</span>`);
+        });
+      });
+      el.innerHTML = words.join(" ");
+    });
+
+    // --- Marquee: all skills joined with separators, doubled for loop ---
+    const allSkills = [...new Set((data.skills?.categories || []).flatMap((cat) => cat.items))];
+    const marqueeContent = allSkills
+      .map((skill) => `<span>${esc(skill)}</span>`)
+      .join('<span class="sep">◆</span>');
+    const doubledContent = marqueeContent + '<span class="sep">◆</span>' + marqueeContent;
+
+    document.getElementById("marqueeTrack").innerHTML = doubledContent;
+    document.getElementById("marqueeTrack2").innerHTML = doubledContent;
+
+    // --- About: word-split summary for scroll reveal ---
+    document.getElementById("aboutText").innerHTML = profile.summary
+      .split(/\n\s*\n/)
+      .map((para) => `<p>${para.trim().split(/\s+/).map((w) => `<span class="word">${esc(w)}</span>`).join(" ")}</p>`)
+      .join("");
+
+    document.getElementById("aboutLangs").innerHTML = (data.languages || [])
+      .map((lang) => `<span class="about__lang">${esc(lang.name)} · ${esc(lang.level)}</span>`)
+      .join("");
+
+    // --- Experience: store data for pinned reveal ---
+    window.__expData = data.experience || [];
+    document.getElementById("expTotal").textContent =
+      String(window.__expData.length).padStart(2, "0");
+
+    if (window.__expData.length) {
+      showExp(0);
+    }
+
+    // --- Experience: render ALL cards for mobile ---
+    const expMobileList = document.getElementById("expMobileList");
+    if (expMobileList) {
+      const mobileLabel = '<span class="sec-label" style="margin-bottom:32px;">02 / Experience</span>';
+      const mobileTitle = '<h2 class="sec-title" style="margin-bottom:40px;">Where I\'ve <em>worked.</em></h2>';
+      let mobileHTML = mobileLabel + mobileTitle;
+
+      (data.experience || []).forEach((exp) => {
+        const highlights = (exp.highlights || [])
+          .map((h) => `<li>${esc(h)}</li>`)
+          .join("");
+
+        const tags = (exp.tags || [])
+          .map((t) => `<span class="tag">${esc(t)}</span>`)
+          .join("");
+
+        mobileHTML += `
+          <div class="exp-mobile-card">
+            <div class="exp-mobile-card__dates">${esc(dateRange(exp.start, exp.end))}</div>
+            <h3 class="exp-mobile-card__role">${esc(exp.title)}</h3>
+            <div class="exp-mobile-card__company">${esc(exp.company)}</div>
+            <div class="exp-mobile-card__location">${esc(exp.location || "")}</div>
+            <ul class="exp-mobile-card__highlights">${highlights}</ul>
+            <div class="tags">${tags}</div>
+          </div>`;
+      });
+
+      expMobileList.innerHTML = mobileHTML;
+    }
+
+    // --- Projects: render cards with 3D tilt ---
+    const projectsGrid = document.getElementById("projectsGrid");
+    (data.projects || []).forEach((project, index) => {
+      const links = (project.links || [])
+        .filter((link) => link.url)
+        .map((link) =>
+          `<a class="proj-link magnetic" href="${esc(link.url)}" target="_blank" rel="noopener">${esc(link.label)}</a>`
+        )
+        .join("");
+
+      const skills = (project.skills || [])
+        .slice(0, 6)
+        .map((skill) => `<span class="tag">${esc(skill)}</span>`)
+        .join("");
+
+      const metrics = (project.metrics || []).length
+        ? `<div class="proj-card__metrics">${project.metrics.map((m) => `<span>${esc(m)}</span>`).join("")}</div>`
+        : "";
+
+      const when = project.start
+        ? (project.end ? dateRange(project.start, project.end) : fmtDate(project.start))
+        : "";
+      const meta = [project.associatedWith, when].filter(Boolean).join(" · ");
+
+      const highlights = project.highlights || [];
+      const body = project.featured
+        ? `<ul class="proj-card__list">${highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>`
+        : `<p class="proj-card__desc">${esc(highlights[0] || "")}</p>`;
+
+      const cardHTML = `
+        <article class="proj-card${project.featured ? " proj-card--featured" : ""}" data-tilt>
+          <div class="proj-card__shine"></div>
+          <span class="proj-card__num">${project.featured ? "FEATURED" : "PROJ"} / ${String(index + 1).padStart(2, "0")}</span>
+          <h3 class="proj-card__title">${esc(project.title)}</h3>
+          ${meta ? `<div class="proj-card__assoc">${esc(meta)}</div>` : ""}
+          ${metrics}
+          ${body}
+          <div class="proj-card__footer">
+            <div class="tags">${skills}</div>
+            ${links ? `<div class="proj-card__links">${links}</div>` : ""}
+          </div>
+        </article>`;
+
+      projectsGrid.insertAdjacentHTML("beforeend", cardHTML);
+    });
+
+    // --- Projects: compact archive list ---
+    const archive = document.getElementById("projectsArchive");
+    if (archive && (data.archive || []).length) {
+      const rows = data.archive.map((a) => {
+        const title = a.url
+          ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>`
+          : `<span>${esc(a.title)}</span>`;
+        return `<li>${title}<span class="archive__meta">${esc(a.context || "")} · ${esc(a.year || "")}</span></li>`;
+      }).join("");
+      archive.innerHTML = `<h3 class="archive__title">Earlier &amp; smaller projects</h3><ul class="archive__list">${rows}</ul>`;
+    }
+
+    // --- Skills: category buttons ---
+    const skillsCatsContainer = document.getElementById("skillsCats");
+    const categories = data.skills?.categories || [];
+
+    categories.forEach((cat, index) => {
+      const btn = document.createElement("button");
+      btn.className = "skill-cat-btn" + (index === 0 ? " active" : "");
+      btn.textContent = cat.label;
+      btn.dataset.index = index;
+      skillsCatsContainer.appendChild(btn);
+    });
+
+    switchCategory(0);
+
+    // Category click handler with scroll-to-position sync
+    skillsCatsContainer.addEventListener("click", (e) => {
+      const btn = e.target.closest(".skill-cat-btn");
+      if (!btn) return;
+
+      const idx = +btn.dataset.index;
+      switchCategory(idx);
+
+      // Scroll to the correct position so scroll-driven switching stays in sync
+      const skillsSection = document.querySelector(".skills");
+      if (skillsSection && window.__skillsST) {
+        const st = window.__skillsST;
+        const totalCats = (window.__portfolioData?.skills?.categories || []).length;
+        const progress = (idx + 0.5) / totalCats;
+        const targetScroll = st.start + progress * (st.end - st.start);
+        window.scrollTo({ top: targetScroll, behavior: "smooth" });
+      }
+    });
+
+    // --- Education ---
+    const eduList = document.getElementById("eduList");
+    (data.education || []).forEach((edu) => {
+      eduList.insertAdjacentHTML("beforeend", `
+        <div class="edu-card">
+          <h3 class="edu-card__qual">${esc(edu.qualification)}</h3>
+          <div class="edu-card__inst">${esc(edu.institution)}</div>
+          ${edu.note ? `<p class="edu-card__note">${esc(edu.note)}</p>` : ""}
+          <div class="edu-card__meta">
+            <span>${esc(dateRange(edu.start, edu.end))}</span>
+            <span>${esc(edu.location || "")}</span>
+          </div>
+        </div>`);
+    });
+
+    // --- Certifications ---
+    const certGrid = document.getElementById("certGrid");
+    (data.certifications || []).forEach((cert) => {
+      certGrid.insertAdjacentHTML("beforeend", `
+        <div class="cert-card">
+          <h3 class="cert-card__title">${esc(cert.title)}</h3>
+          <div class="cert-card__issuer">${esc(cert.issuer)}</div>
+          <span class="cert-card__date">Issued ${esc(cert.issued)}</span>
+          ${cert.credentialUrl
+            ? `<a class="cert-card__link magnetic" href="${esc(cert.credentialUrl)}" target="_blank" rel="noopener">View credential</a>`
+            : ""}
+        </div>`);
+    });
+
+    // --- Contact: per-character title ---
+    document.getElementById("contactTitle").innerHTML = splitChars("Let's ", "connect.");
+
+    const contactLinksContainer = document.getElementById("contactLinks");
+    const contactItems = [
+      contacts.email && { href: `mailto:${contacts.email}`, label: contacts.email, icon: "email" },
+      contacts.linkedin && { href: contacts.linkedin, label: "LinkedIn", icon: "linkedin" },
+      contacts.github && { href: contacts.github, label: "GitHub", icon: "github" },
+      contacts.kaggle && { href: contacts.kaggle, label: "Kaggle", icon: "kaggle" },
+      contacts.leetcode && { href: contacts.leetcode, label: "LeetCode", icon: "leetcode" },
+    ].filter(Boolean);
+
+    contactItems.forEach((item) => {
+      const external = !item.href.startsWith("mailto:");
+      contactLinksContainer.insertAdjacentHTML(
+        "beforeend",
+        `<a class="contact__link magnetic" href="${esc(item.href)}"${external ? ' target="_blank" rel="noopener"' : ""}>${ICONS[item.icon]}<span>${esc(item.label)}</span></a>`
+      );
+    });
+
+    // Location is information, not a link
+    contactLinksContainer.insertAdjacentHTML(
+      "beforeend",
+      `<span class="contact__link contact__link--static">${ICONS.loc}<span>${esc(profile.location || "Dublin, Ireland")}</span></span>`
+    );
+
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+    document.getElementById("footerName").textContent = profile.fullName;
+  }
+
+
+  /* ================================================================
+     EXPERIENCE REVEAL — GTA VI character-style content swap
+     ================================================================ */
+
+  let isFirstExpLoad = true;
+
+  /**
+   * Shows experience at given index. First call populates instantly;
+   * subsequent calls crossfade (animate out → swap → animate in).
+   */
+  function showExp(index) {
+    const experiences = window.__expData;
+    if (!experiences || !experiences[index]) return;
+
+    const exp = experiences[index];
+    const card = document.getElementById("expCard");
+
+    function populateCard() {
+      document.getElementById("expDates").textContent = dateRange(exp.start, exp.end);
+      document.getElementById("expRole").textContent = exp.title;
+      document.getElementById("expCompany").textContent = exp.company;
+      document.getElementById("expLocation").textContent = exp.location || "";
+      document.getElementById("expHighlights").innerHTML =
+        (exp.highlights || []).map((h) => `<li>${esc(h)}</li>`).join("");
+      document.getElementById("expTags").innerHTML =
+        (exp.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
+      document.getElementById("expIdx").textContent =
+        String(index + 1).padStart(2, "0");
+    }
+
+    // First load: no animation needed (nothing to fade out)
+    if (isFirstExpLoad) {
+      populateCard();
+      isFirstExpLoad = false;
+      return;
+    }
+
+    // Subsequent: crossfade
+    gsap.to(card, {
+      opacity: 0,
+      y: 20,
+      duration: 0.3,
+      ease: "power2.in",
+      onComplete: () => {
+        populateCard();
+        gsap.fromTo(card,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+        );
+      },
+    });
+  }
+
+
+  /* ================================================================
+     SKILL CATEGORY SWITCHING
+     ================================================================ */
+
+  /**
+   * Switches displayed skills to the given category index.
+   * Animates old chips out, then new chips in.
+   */
+  function switchCategory(index) {
+    const categories = window.__portfolioData?.skills?.categories || [];
+    const category = categories[index];
+    if (!category) return;
+
+    const display = document.getElementById("skillsDisplay");
+    const catContainer = document.getElementById("skillsCats");
+
+    // Update active button
+    catContainer.querySelectorAll(".skill-cat-btn").forEach((btn, i) => {
+      btn.classList.toggle("active", i === index);
+    });
+
+    // Animate out existing chips
+    const existingChips = display.querySelectorAll(".skill-chip");
+    if (existingChips.length) {
+      gsap.to(existingChips, {
+        opacity: 0,
+        y: 8,
+        duration: 0.2,
+        stagger: 0.01,
+        ease: "power2.in",
+        onComplete: () => {
+          display.innerHTML = "";
+          renderChips(category.items);
+        },
+      });
+    } else {
+      renderChips(category.items);
+    }
+  }
+
+  /**
+   * Creates chip elements and animates them in.
+   */
+  function renderChips(items) {
+    const display = document.getElementById("skillsDisplay");
+
+    items.forEach((item) => {
+      display.insertAdjacentHTML(
+        "beforeend",
+        `<span class="skill-chip">${esc(item)}</span>`
+      );
+    });
+
+    gsap.fromTo(
+      display.querySelectorAll(".skill-chip"),
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.025, ease: "power3.out" }
+    );
+  }
+
+
+  /* ================================================================
+     SCROLL SPY
+     Highlights the active nav link based on viewport position.
+     ================================================================ */
+
+  function initScrollSpy() {
+    const sectionIds = [
+      "about", "experience", "projects",
+      "skills", "education", "certifications", "contact",
+    ];
+
+    const navLinks = document.querySelectorAll(".nav__link[data-section]");
+
+    sectionIds.forEach((id) => {
+      const section = document.getElementById(id);
+      if (!section) return;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 40%",
+        end: "bottom 40%",
+        onToggle: (self) => {
+          navLinks.forEach((link) => {
+            link.classList.toggle(
+              "active",
+              self.isActive && link.dataset.section === id
+            );
+          });
+        },
+      });
+    });
+  }
+
+
+  /* ================================================================
+     5. GSAP ANIMATION CONTROLLER
+     All scroll-driven animations set up here.
+     ================================================================ */
+
+  function initAnimations() {
+    const mediaQuery = gsap.matchMedia();
+
+    // --- Scroll progress bar ---
+    ScrollTrigger.create({
+      start: 0,
+      end: "max",
+      onUpdate: (self) => {
+        document.getElementById("progress")
+          .style.setProperty("--sp", `${self.progress * 100}%`);
+      },
+    });
+
+    // --- Nav: hidden initially, appears after hero ---
+    ScrollTrigger.create({
+      trigger: ".hero",
+      start: "80% top",
+      once: true,
+      onEnter: () => {
+        document.getElementById("nav").classList.add("visible");
+        gsap.to("#nav", { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" });
+      },
+    });
+
+    ScrollTrigger.create({
+      start: 30,
+      onUpdate: (self) => {
+        document.getElementById("nav").classList.toggle("scrolled", self.scroll() > 30);
+      },
+    });
+
+    // --- HERO: massive centered character reveal ---
+    const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+    heroTimeline
+      .to(".hero__title .char",  { y: 0, opacity: 1, duration: 1, stagger: 0.02 })
+      .to(".hero__tag",          { opacity: 1, duration: 0.6 }, "-=0.3")
+      .to(".hero__sub",          { opacity: 1, duration: 0.6 }, "-=0.2")
+      .to(".hero__actions",      { opacity: 1, duration: 0.6 }, "-=0.2")
+      .to(".hero__socials",      { opacity: 1, duration: 0.6 }, "-=0.2")
+      .to("#heroScroll",         { opacity: 1, duration: 0.5 }, "-=0.1")
+      .to(".hero__scene",        { opacity: 0.6, y: 0, scale: 1, duration: 1.2, ease: "power3.out" }, "-=1.2");
+
+    // --- Coder scene: code lines typing animation ---
+    const isMobileDevice = innerWidth < 860;
+
+    const codeTimeline = gsap.timeline({ delay: 1.6 });
+    document.querySelectorAll(".code-line").forEach((line, i) => {
+      gsap.set(line, { scaleX: 0 });
+      codeTimeline.to(line, {
+        scaleX: 1,
+        duration: 0.25 + Math.random() * 0.2,
+        ease: "power2.out",
+      }, i * 0.1);
+    });
+
+    // --- Floating code symbols: skip on mobile for performance ---
+    if (!isMobileDevice) {
+      document.querySelectorAll(".float-sym").forEach((sym, i) => {
+        const delay = 2.2 + i * 0.35;
+
+        gsap.to(sym, {
+          opacity: 0.25 + Math.random() * 0.2,
+          duration: 0.8,
+          delay,
+          ease: "power2.out",
+        });
+
+        gsap.to(sym, {
+          y: -20 - Math.random() * 30,
+          x: (Math.random() - 0.5) * 20,
+          duration: 4 + Math.random() * 3,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay,
+        });
+      });
+    }
+
+    // --- Head bob: skip on mobile ---
+    if (!isMobileDevice) {
+      gsap.to(".coder__head", {
+        y: -2,
+        duration: 3,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        delay: 2,
+      });
+    }
+
+    // --- Tech logos: skip continuous animations on mobile ---
+    const logos = document.querySelectorAll(".tech-logo");
+    if (!isMobileDevice) {
+      logos.forEach((logo, i) => {
+        const angle = (i / logos.length) * Math.PI * 2;
+        const fromX = Math.cos(angle) * 40;
+        const fromY = Math.sin(angle) * 40;
+
+        gsap.fromTo(logo,
+          { opacity: 0, x: fromX, y: fromY, scale: 0.6 },
+          { opacity: 0.55, x: 0, y: 0, scale: 1, duration: 1, ease: "power3.out", delay: 1.8 + i * 0.12 }
+        );
+
+        const floatDuration = 5 + Math.random() * 4;
+        gsap.to(logo, {
+          y: -8 - Math.random() * 16,
+          x: (Math.random() - 0.5) * 10,
+          duration: floatDuration,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: 2.5 + i * 0.2,
+        });
+
+        gsap.to(logo, {
+          rotation: (Math.random() - 0.5) * 8,
+          duration: floatDuration * 1.3,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: 2.5 + i * 0.15,
+        });
+      });
+    } else {
+      // On mobile: just fade logos in statically
+      logos.forEach((logo, i) => {
+        gsap.to(logo, {
+          opacity: 0.4,
+          duration: 0.6,
+          delay: 1.5 + i * 0.08,
+          ease: "power2.out",
+        });
+      });
+    }
+
+    // --- Hero scroll parallax (desktop only — mobile gets simple fade) ---
+    if (!isMobileDevice) {
+      gsap.to(".hero__fg", {
+        y: -100,
+        opacity: 0,
+        scrollTrigger: { trigger: ".hero", start: "40% top", end: "90% top", scrub: true },
+      });
+
+      gsap.to(".hero__scene", {
+        y: 60,
+        opacity: 0,
+        scale: 0.9,
+        scrollTrigger: { trigger: ".hero", start: "50% top", end: "bottom top", scrub: true },
+      });
+
+      gsap.to(".hero__bg-layer", {
+        scale: 1.1,
+        opacity: 0.2,
+        scrollTrigger: { trigger: ".hero", start: "40% top", end: "bottom top", scrub: true },
+      });
+
+      gsap.to(".float-sym", {
+        y: -50,
+        scrollTrigger: { trigger: ".hero", start: "20% top", end: "bottom top", scrub: true },
+      });
+
+      // Logos scatter outward on scroll
+      logos.forEach((logo, i) => {
+        const direction = i % 2 === 0 ? -1 : 1;
+        gsap.to(logo, {
+          y: -30 - Math.random() * 40,
+          x: direction * (20 + Math.random() * 30),
+          opacity: 0,
+          scale: 0.7,
+          scrollTrigger: { trigger: ".hero", start: "30% top", end: "90% top", scrub: true },
+        });
+      });
+    }
+
+    // --- STATEMENT: word-by-word scrub reveal ---
+    document.querySelectorAll(".statement").forEach((section) => {
+      const words = section.querySelectorAll(".word");
+      if (!words.length) return;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.5,
+        onUpdate: (self) => {
+          const litCount = Math.ceil(self.progress * 2 * words.length);
+          words.forEach((word, i) => word.classList.toggle("lit", i < litCount));
+        },
       });
     });
 
-    /* ─── ABOUT — pinned word reveal ─── */
-    mm.add("(min-width:861px)",()=>{
-      const aboutEl=document.querySelector(".about");
-      const words=aboutEl.querySelectorAll(".about__text .word");
-      const wc=words.length;
-      const sd=Math.max(wc*18,innerHeight*1.5);
-      aboutEl.style.height=(sd+innerHeight)+"px";
-      ScrollTrigger.create({trigger:aboutEl,start:"top top",end:"bottom bottom",pin:".about__pin",pinSpacing:false,invalidateOnRefresh:true});
-      if(wc)ScrollTrigger.create({trigger:aboutEl,start:"top top",end:()=>`bottom-=${innerHeight*.5} bottom`,scrub:.5,invalidateOnRefresh:true,
-        onUpdate:self=>{const lit=Math.ceil(self.progress*wc);words.forEach((w,i)=>w.classList.toggle("lit",i<lit))}});
-      gsap.fromTo(".about__langs",{opacity:0,y:16},{opacity:1,y:0,duration:.8,scrollTrigger:{trigger:aboutEl,start:"70% center",end:"85% center",scrub:true,invalidateOnRefresh:true}});
-      gsap.fromTo(".about__orb",{scale:.85},{scale:1.05,scrollTrigger:{trigger:aboutEl,start:"top top",end:"bottom bottom",scrub:true}});
+    // --- ABOUT: pinned word reveal (desktop only) ---
+    mediaQuery.add("(min-width: 861px)", () => {
+      const aboutSection = document.querySelector(".about");
+      const aboutWords = aboutSection.querySelectorAll(".about__text .word");
+      const wordCount = aboutWords.length;
+      const scrollDistance = Math.max(wordCount * 18, innerHeight * 1.5);
+
+      aboutSection.style.height = `${scrollDistance + innerHeight}px`;
+
+      ScrollTrigger.create({
+        trigger: aboutSection,
+        start: "top top",
+        end: "bottom bottom",
+        pin: ".about__pin",
+        pinSpacing: false,
+        invalidateOnRefresh: true,
+      });
+
+      if (wordCount) {
+        ScrollTrigger.create({
+          trigger: aboutSection,
+          start: "top top",
+          end: () => `bottom-=${innerHeight * 0.5} bottom`,
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const litCount = Math.ceil(self.progress * wordCount);
+            aboutWords.forEach((word, i) => word.classList.toggle("lit", i < litCount));
+          },
+        });
+      }
+
+      gsap.fromTo(".about__langs",
+        { opacity: 0, y: 16 },
+        {
+          opacity: 1, y: 0, duration: 0.8,
+          scrollTrigger: {
+            trigger: aboutSection,
+            start: "70% center",
+            end: "85% center",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+
+      gsap.fromTo(".about__orb",
+        { scale: 0.85 },
+        {
+          scale: 1.05,
+          scrollTrigger: { trigger: aboutSection, start: "top top", end: "bottom bottom", scrub: true },
+        }
+      );
     });
 
-    /* ─── EXPERIENCE — GTA VI pinned full-viewport reveal ─── */
-    mm.add("(min-width:861px)",()=>{
-      const sec=document.querySelector(".experience");
-      const expData=window.__expData||[];
-      const total=expData.length;if(!total)return;
-      const scrollPer=innerHeight*.9;
-      const totalScroll=scrollPer*total;
-      sec.style.height=(totalScroll+innerHeight)+"px";
-      let currentExp=0;
-      ScrollTrigger.create({trigger:sec,start:"top top",end:()=>`+=${totalScroll}`,pin:".experience__pin",anticipatePin:1,invalidateOnRefresh:true,
-        onRefresh:()=>{sec.style.height=(scrollPer*total+innerHeight)+"px"},
-        onUpdate:self=>{
-          const idx=Math.min(Math.floor(self.progress*total),total-1);
-          document.getElementById("expProgressFill").style.width=(self.progress*100)+"%";
-          if(idx!==currentExp){currentExp=idx;showExp(idx)}
+    // --- EXPERIENCE: GTA VI pinned full-viewport reveal (desktop only) ---
+    mediaQuery.add("(min-width: 861px)", () => {
+      const section = document.querySelector(".experience");
+      const expData = window.__expData || [];
+      const total = expData.length;
+      if (!total) return;
+
+      const scrollPerRole = innerHeight * 0.9;
+      const totalScroll = scrollPerRole * total;
+      section.style.height = `${totalScroll + innerHeight}px`;
+
+      let currentExpIndex = 0;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: () => `+=${totalScroll}`,
+        pin: ".experience__pin",
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onRefresh: () => {
+          section.style.height = `${scrollPerRole * total + innerHeight}px`;
+        },
+        onUpdate: (self) => {
+          const index = Math.min(Math.floor(self.progress * total), total - 1);
+          document.getElementById("expProgressFill").style.width = `${self.progress * 100}%`;
+
+          if (index !== currentExpIndex) {
+            currentExpIndex = index;
+            showExp(index);
+          }
+        },
+      });
+    });
+
+    // --- MOBILE EXPERIENCE CARDS: staggered reveal ---
+    gsap.utils.toArray(".exp-mobile-card").forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" },
+        delay: i * 0.06,
+      });
+    });
+
+    // --- PROJECTS: staggered scroll reveal ---
+    gsap.utils.toArray(".proj-card").forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" },
+        delay: (i % 2) * 0.1,
+      });
+    });
+
+    // --- SKILLS: pinned scroll-driven category switching (desktop only) ---
+    mediaQuery.add("(min-width: 861px)", () => {
+      const skillsSection = document.querySelector(".skills");
+      const catButtons = document.querySelectorAll(".skill-cat-btn");
+      const totalCategories = catButtons.length;
+      if (!totalCategories) return;
+
+      const scrollPerCategory = innerHeight * 0.65;
+      const totalSkillScroll = scrollPerCategory * totalCategories;
+      skillsSection.style.height = `${totalSkillScroll + innerHeight}px`;
+
+      let currentCatIndex = 0;
+
+      const skillsST = ScrollTrigger.create({
+        trigger: skillsSection,
+        start: "top top",
+        end: () => `+=${totalSkillScroll}`,
+        pin: ".skills__pin",
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onRefresh: () => {
+          skillsSection.style.height = `${scrollPerCategory * totalCategories + innerHeight}px`;
+        },
+        onUpdate: (self) => {
+          const index = Math.min(
+            Math.floor(self.progress * totalCategories),
+            totalCategories - 1
+          );
+          if (index !== currentCatIndex) {
+            currentCatIndex = index;
+            switchCategory(index);
+          }
+        },
+      });
+
+      // Store reference so category click handler can scroll to position
+      window.__skillsST = skillsST;
+    });
+
+    // --- EDUCATION: slide-in reveal ---
+    gsap.utils.toArray(".edu-card").forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none none" },
+        delay: i * 0.08,
+      });
+    });
+
+    // --- CERTIFICATIONS: staggered reveal ---
+    gsap.utils.toArray(".cert-card").forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" },
+        delay: (i % 3) * 0.07,
+      });
+    });
+
+    // --- CONTACT: per-character reveal ---
+    ScrollTrigger.create({
+      trigger: ".contact",
+      start: "top 70%",
+      once: true,
+      onEnter: () => {
+        gsap.to(".contact__title .char", {
+          y: 0, opacity: 1, duration: 0.7, stagger: 0.02, ease: "power3.out",
+        });
+        gsap.to(".contact__sub", {
+          opacity: 1, y: 0, duration: 0.7, delay: 0.3, ease: "power3.out",
+        });
+        gsap.from(".contact-form", {
+          opacity: 0, y: 20, duration: 0.7, delay: 0.4, ease: "power3.out",
+        });
+        gsap.to(".contact__link", {
+          opacity: 1, y: 0, duration: 0.5, stagger: 0.05, delay: 0.5, ease: "power3.out",
+        });
+      },
+    });
+
+    // --- Section labels & titles: scroll-triggered reveal ---
+    gsap.utils.toArray(".anim-label").forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, x: -20 },
+        {
+          opacity: 1, x: 0, duration: 0.7, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 92%", toggleActions: "play none none none" },
+        }
+      );
+    });
+
+    gsap.utils.toArray(".anim-title").forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 28 },
+        {
+          opacity: 1, y: 0, duration: 0.8, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" },
+        }
+      );
+    });
+
+    // --- Glow parallax ---
+    gsap.to(".hero__glow--1", {
+      y: 200,
+      scrollTrigger: { start: "top top", end: "bottom bottom", scrub: 3 },
+    });
+
+    gsap.to(".hero__glow--2", {
+      y: -200,
+      scrollTrigger: { start: "top top", end: "bottom bottom", scrub: 3 },
+    });
+
+    // --- Scroll spy ---
+    initScrollSpy();
+
+    // --- MARQUEE ARROW BUTTONS ---
+    document.querySelectorAll(".marquee").forEach((marquee) => {
+      const track = marquee.querySelector(".marquee__track");
+      const leftBtn = marquee.querySelector(".marquee__btn--left");
+      const rightBtn = marquee.querySelector(".marquee__btn--right");
+      if (!track || !leftBtn || !rightBtn) return;
+
+      /**
+       * Shifts the marquee track by 300px in the given direction.
+       * Pauses auto-scroll, applies transform, resumes after 2s.
+       * @param {number} direction - 1 for left (backward), -1 for right (forward)
+       */
+      function shiftMarquee(direction) {
+        const computedStyle = getComputedStyle(track);
+        const matrix = new DOMMatrix(computedStyle.transform);
+        const currentX = matrix.m41;
+        const shiftAmount = direction * 300;
+
+        // Pause CSS animation and apply manual position
+        track.style.animation = "none";
+        track.style.transform = `translateX(${currentX + shiftAmount}px)`;
+
+        // Resume auto-scroll after delay
+        clearTimeout(track.__resumeTimer);
+        track.__resumeTimer = setTimeout(() => {
+          track.style.animation = "";
+          track.style.transform = "";
+        }, 2000);
+      }
+
+      leftBtn.addEventListener("click", () => shiftMarquee(1));
+      rightBtn.addEventListener("click", () => shiftMarquee(-1));
+    });
+  }
+
+
+  /* ================================================================
+     CONTACT FORM
+     Posts to Netlify Forms via fetch so the visitor stays on the page.
+     Netlify stores each submission and emails a notification.
+     ================================================================ */
+
+  function initContactForm() {
+    const form = document.getElementById("contactForm");
+    if (!form) return;
+
+    const status = document.getElementById("contactStatus");
+    const submit = document.getElementById("contactSubmit");
+    const fallbackEmail = window.__portfolioData?.profile?.contacts?.email || "";
+
+    function setStatus(msg, type) {
+      status.textContent = msg;
+      status.className = `contact-form__status${type ? ` is-${type}` : ""}`;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fd = new FormData(form);
+      const name = String(fd.get("name") || "").trim();
+      const email = String(fd.get("email") || "").trim();
+      const phone = String(fd.get("phone") || "").trim();
+      const message = String(fd.get("message") || "").trim();
+
+      form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+      const invalid = [];
+      if (!name) invalid.push("name");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) invalid.push("email");
+      if (phone && !/^[0-9+()\-\s]{6,30}$/.test(phone)) invalid.push("phone");
+      if (message.length < 10) invalid.push("message");
+
+      if (invalid.length) {
+        invalid.forEach((n) => form.elements[n].classList.add("is-invalid"));
+        form.elements[invalid[0]].focus();
+        setStatus(
+          invalid.includes("message") && invalid.length === 1
+            ? "Please write a slightly longer message."
+            : "Please check the highlighted fields.",
+          "error"
+        );
+        return;
+      }
+
+      submit.disabled = true;
+      setStatus("Sending…", "");
+
+      try {
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(fd).toString(),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        form.reset();
+        setStatus("Thanks — your message has been sent. I'll reply by email.", "success");
+      } catch (err) {
+        setStatus(
+          `Sorry, that didn't go through. Please email me directly${fallbackEmail ? ` at ${fallbackEmail}` : ""}.`,
+          "error"
+        );
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+
+
+  /* ================================================================
+     6. LOADER SEQUENCE
+     Animates name chars in, counts to 100%, then fades out.
+     ================================================================ */
+
+  function runLoader(onComplete) {
+    const fillBar = document.getElementById("loaderFill");
+    const percentDisplay = document.getElementById("loaderPct");
+    const nameChars = document.querySelectorAll(".loader__name .char");
+
+    // Animate name chars in
+    gsap.to(nameChars, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.03,
+      ease: "power3.out",
+      delay: 0.15,
+    });
+
+    // Count up from 0 to 100
+    let value = 0;
+    const interval = setInterval(() => {
+      value += Math.floor(Math.random() * 10) + 12;
+      if (value > 100) value = 100;
+
+      fillBar.style.width = `${value}%`;
+      percentDisplay.textContent = value;
+
+      if (value >= 100) {
+        clearInterval(interval);
+
+        // Animate chars out
+        gsap.to(nameChars, {
+          y: -80,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.015,
+          ease: "power3.in",
+          delay: 0.25,
+        });
+
+        // Fade loader
+        gsap.to("#loader", {
+          opacity: 0,
+          duration: 0.6,
+          delay: 0.7,
+          onComplete: () => {
+            document.getElementById("loader").classList.add("done");
+            onComplete();
+          },
+        });
+      }
+    }, 30);
+  }
+
+
+  /* ================================================================
+     7. RESIZE HANDLER
+     Debounced — recalculates all ScrollTrigger positions.
+     ================================================================ */
+
+  let resizeTimer;
+  addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 200);
+  });
+
+
+  /* ================================================================
+     8. BOOT SEQUENCE
+     Mobile menu toggle → Fetch data → Render → Loader → Init all.
+     ================================================================ */
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById("navToggle");
+  const navMenu = document.getElementById("navMenu");
+
+  navToggle.addEventListener("click", () => {
+    navToggle.classList.toggle("open");
+    navMenu.classList.toggle("open");
+  });
+
+  navMenu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navToggle.classList.remove("open");
+      navMenu.classList.remove("open");
+    });
+  });
+
+  // Fetch data → render → animate
+  fetch("portfolio-data.json", { cache: "no-cache" })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    })
+    .then((data) => {
+      window.__portfolioData = data;
+      render(data);
+
+      runLoader(() => {
+        initCursor();
+        initMagnetic();
+        initParticles();
+        initTilt();
+        initThemeToggle();
+        initContactForm();
+        initAnimations();
+        ScrollTrigger.refresh();
+
+        // Show mobile banner after loader (mobile only)
+        const mobileBanner = document.getElementById("mobileBanner");
+        const bannerClose = document.getElementById("mobileBannerClose");
+
+        if (mobileBanner && innerWidth <= 860) {
+          setTimeout(() => mobileBanner.classList.add("visible"), 800);
+
+          bannerClose.addEventListener("click", () => {
+            mobileBanner.classList.add("hidden");
+            mobileBanner.classList.remove("visible");
+          });
+
+          // Auto-dismiss after 6 seconds
+          setTimeout(() => {
+            if (!mobileBanner.classList.contains("hidden")) {
+              mobileBanner.classList.add("hidden");
+              mobileBanner.classList.remove("visible");
+            }
+          }, 6000);
         }
       });
+    })
+    .catch((error) => {
+      document.getElementById("loader").innerHTML = `
+        <div style="text-align:center; padding:40px; font-family:system-ui;">
+          <h2>Failed to load data</h2>
+          <p style="color:#a09889; margin-top:8px;">${error.message}</p>
+          <p style="color:#5c5549; margin-top:12px;">
+            Run: <code>python3 -m http.server</code>
+          </p>
+        </div>`;
     });
-
-    /* ─── PROJECTS ─── */
-    gsap.utils.toArray(".proj-card").forEach((c,i)=>gsap.to(c,{opacity:1,y:0,duration:.9,ease:"power3.out",scrollTrigger:{trigger:c,start:"top 90%",toggleActions:"play none none none"},delay:(i%2)*.1}));
-
-    /* ─── SKILLS ─── */
-    mm.add("(min-width:861px)",()=>{
-      const ss=document.querySelector(".skills");const cbs=document.querySelectorAll(".skill-cat-btn");const tc=cbs.length;if(!tc)return;
-      const sp=innerHeight*.65,ts=sp*tc;ss.style.height=(ts+innerHeight)+"px";
-      let cc=0;
-      ScrollTrigger.create({trigger:ss,start:"top top",end:()=>`+=${ts}`,pin:".skills__pin",anticipatePin:1,invalidateOnRefresh:true,
-        onRefresh:()=>{ss.style.height=(sp*tc+innerHeight)+"px"},
-        onUpdate:self=>{const idx=Math.min(Math.floor(self.progress*tc),tc-1);if(idx!==cc){cc=idx;switchCat(idx)}}
-      });
-    });
-
-    /* ─── EDUCATION ─── */
-    gsap.utils.toArray(".edu-card").forEach((c,i)=>gsap.to(c,{opacity:1,x:0,duration:.8,ease:"power3.out",scrollTrigger:{trigger:c,start:"top 88%",toggleActions:"play none none none"},delay:i*.08}));
-
-    /* ─── CERTS ─── */
-    gsap.utils.toArray(".cert-card").forEach((c,i)=>gsap.to(c,{opacity:1,y:0,duration:.7,ease:"power3.out",scrollTrigger:{trigger:c,start:"top 90%",toggleActions:"play none none none"},delay:(i%3)*.07}));
-
-    /* ─── CONTACT ─── */
-    ScrollTrigger.create({trigger:".contact",start:"top 70%",once:true,onEnter:()=>{
-      gsap.to(".contact__title .char",{y:0,opacity:1,duration:.7,stagger:.02,ease:"power3.out"});
-      gsap.to(".contact__sub",{opacity:1,y:0,duration:.7,delay:.3,ease:"power3.out"});
-      gsap.to(".contact__link",{opacity:1,y:0,duration:.5,stagger:.05,delay:.5,ease:"power3.out"});
-    }});
-
-    /* Labels & titles */
-    gsap.utils.toArray(".anim-label").forEach(el=>gsap.fromTo(el,{opacity:0,x:-20},{opacity:1,x:0,duration:.7,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 92%",toggleActions:"play none none none"}}));
-    gsap.utils.toArray(".anim-title").forEach(el=>gsap.fromTo(el,{opacity:0,y:28},{opacity:1,y:0,duration:.8,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 88%",toggleActions:"play none none none"}}));
-
-    /* Glow parallax */
-    gsap.to(".hero__glow--1",{y:200,scrollTrigger:{start:"top top",end:"bottom bottom",scrub:3}});
-    gsap.to(".hero__glow--2",{y:-200,scrollTrigger:{start:"top top",end:"bottom bottom",scrub:3}});
-
-    initScrollSpy();
-  }
-
-  /* ─── LOADER ─── */
-  function runLoader(cb){
-    const fill=document.getElementById("loaderFill"),pct=document.getElementById("loaderPct"),chars=document.querySelectorAll(".loader__name .char");
-    gsap.to(chars,{y:0,opacity:1,duration:.6,stagger:.03,ease:"power3.out",delay:.15});
-    let v=0;const t=setInterval(()=>{v+=Math.floor(Math.random()*10)+12;if(v>100)v=100;fill.style.width=v+"%";pct.textContent=v;
-      if(v>=100){clearInterval(t);gsap.to(chars,{y:-80,opacity:0,duration:.4,stagger:.015,ease:"power3.in",delay:.25});gsap.to("#loader",{opacity:0,duration:.6,delay:.7,onComplete:()=>{document.getElementById("loader").classList.add("done");cb()}})}
-    },30);
-  }
-
-  /* ─── RESIZE ─── */
-  let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>ScrollTrigger.refresh(),200)});
-
-  /* ─── BOOT ─── */
-  const nt=document.getElementById("navToggle"),nm=document.getElementById("navMenu");
-  nt.addEventListener("click",()=>{nt.classList.toggle("open");nm.classList.toggle("open")});
-  nm.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{nt.classList.remove("open");nm.classList.remove("open")}));
-
-  fetch("portfolio-data.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(data=>{
-    window.__portfolioData=data;render(data);
-    runLoader(()=>{initCursor();initMagnetic();initParticles();initTilt();initAnimations();ScrollTrigger.refresh()});
-  }).catch(err=>{document.getElementById("loader").innerHTML=`<div style="text-align:center;padding:40px;font-family:system-ui"><h2>Failed to load data</h2><p style="color:#a09889;margin-top:8px">${err.message}</p><p style="color:#5c5549;margin-top:12px">Run: <code>python3 -m http.server</code></p></div>`});
 })();

@@ -17,105 +17,243 @@
       {
         "id": "core",
         "label": "Core stack",
-        "items": ["Python", "SQL", "pandas", "scikit-learn", "XGBoost", "SHAP", "Apache Spark", "Apache Kafka", "FastAPI", "Streamlit", "Tableau", "Power BI", "Git"]
+        "items": [
+          "Python",
+          "SQL",
+          "pandas",
+          "scikit-learn",
+          "XGBoost",
+          "SHAP",
+          "Apache Spark",
+          "Apache Kafka",
+          "FastAPI",
+          "Streamlit",
+          "Tableau",
+          "Power BI",
+          "Git"
+        ]
       },
       {
         "id": "languages",
         "label": "Languages",
-        "items": ["Python", "SQL", "Java", "JavaScript", "R", "HTML & CSS", "C", "PL/SQL"]
+        "items": [
+          "Python",
+          "SQL",
+          "Java",
+          "JavaScript",
+          "R",
+          "HTML & CSS",
+          "C",
+          "PL/SQL"
+        ]
       },
       {
         "id": "ml",
         "label": "Machine learning",
-        "items": ["scikit-learn", "XGBoost", "Random Forest", "Logistic Regression", "SHAP explainability", "Probability calibration (Platt scaling)", "Class imbalance handling", "Time-series aware validation", "TensorFlow / Keras", "Transfer learning (MobileNetV2, ResNet50)", "YOLOv8", "BiLSTM & DistilBERT", "K-Means clustering"]
+        "items": [
+          "scikit-learn",
+          "XGBoost",
+          "Random Forest",
+          "Logistic Regression",
+          "SHAP explainability",
+          "Probability calibration (Platt scaling)",
+          "Class imbalance handling",
+          "Time-series aware validation",
+          "TensorFlow / Keras",
+          "Transfer learning (MobileNetV2, ResNet50)",
+          "YOLOv8",
+          "CNNs & LSTMs",
+          "K-Means clustering"
+        ]
       },
       {
         "id": "data_eng",
         "label": "Data engineering",
-        "items": ["pandas", "NumPy", "Parquet", "Apache Spark", "Apache Kafka", "Apache Cassandra", "Lambda / Kappa architecture", "GitHub Actions (scheduled ingestion)", "REST API ingestion", "Feature engineering", "Data cleaning & imputation"]
+        "items": [
+          "pandas",
+          "NumPy",
+          "Parquet",
+          "Apache Spark",
+          "Apache Kafka",
+          "Apache Cassandra",
+          "Lambda / Kappa architecture",
+          "GitHub Actions (scheduled ingestion)",
+          "REST API ingestion",
+          "Feature engineering",
+          "Data cleaning & imputation"
+        ]
       },
       {
         "id": "cloud",
         "label": "Cloud & backend",
-        "items": ["FastAPI", "MongoDB Atlas", "Firebase Authentication", "Azure Blob Storage", "Oracle Database", "Streamlit Community Cloud", "Netlify"]
+        "items": [
+          "FastAPI",
+          "MongoDB Atlas",
+          "Firebase Authentication",
+          "Azure Blob Storage",
+          "Oracle Database",
+          "Streamlit Community Cloud",
+          "Netlify"
+        ]
       },
       {
         "id": "bi",
         "label": "BI & analytics",
-        "items": ["Tableau", "Microsoft Power BI", "LOD expressions", "Time-series forecasting", "Exploratory data analysis", "Streamlit dashboards"]
+        "items": [
+          "Tableau",
+          "Microsoft Power BI",
+          "LOD expressions",
+          "Time-series forecasting",
+          "Exploratory data analysis",
+          "Streamlit dashboards"
+        ]
       },
       {
         "id": "tools",
         "label": "Tools",
-        "items": ["Git & GitHub", "VS Code", "Jupyter", "Google Colab", "Linux (Ubuntu)", "VirtualBox", "LaTeX", "GSAP"]
+        "items": [
+          "Git & GitHub",
+          "VS Code",
+          "Jupyter",
+          "Google Colab",
+          "Linux (Ubuntu)",
+          "VirtualBox",
+          "LaTeX",
+          "GSAP"
+        ]
       }
     ]
   },
   "languages": [
-    { "name": "English", "level": "Native or Bilingual" },
-    { "name": "Hindi", "level": "Native or Bilingual" },
-    { "name": "Bengali", "level": "Native or Bilingual" },
-    { "name": "German", "level": "Elementary" }
+    {
+      "name": "English",
+      "level": "Native or Bilingual"
+    },
+    {
+      "name": "Hindi",
+      "level": "Native or Bilingual"
+    },
+    {
+      "name": "Bengali",
+      "level": "Native or Bilingual"
+    },
+    {
+      "name": "German",
+      "level": "Elementary"
+    }
   ],
   "experience": [
     {
+      "company": "Fresh The Good Food Market",
+      "title": "Store Assistant",
+      "start": "2026-03",
+      "end": "",
+      "location": "Dublin, Ireland · Part-time",
+      "highlights": [
+        "Customer service, stock replenishment and stock rotation on the shop floor, working part-time alongside the MSc."
+      ],
+      "tags": [
+        "Retail",
+        "Stock Management",
+        "Customer Service"
+      ]
+    },
+    {
       "company": "Sky Handling Partner",
-      "title": "Aircraft Appearance",
+      "title": "Aircraft Appearance Operative",
       "start": "2025-06",
       "end": "2025-10",
-      "location": "Dublin Airport, Ireland",
+      "location": "Dublin Airport, Ireland · Part-time",
       "highlights": [
         "Prepared aircraft cabins during time-critical turnarounds, working to fixed turnaround windows and airside safety procedures."
       ],
-      "tags": ["Operations", "Teamwork", "Working under time pressure"]
+      "tags": [
+        "Operations",
+        "Teamwork",
+        "Working under time pressure"
+      ]
+    },
+    {
+      "company": "S.P Enterprises",
+      "title": "Information Technology Manager",
+      "start": "2023-06",
+      "end": "2024-07",
+      "location": "Bhilai, India · Full-time",
+      "highlights": [
+        "Ran the company's IT systems and supported staff with day-to-day technical issues.",
+        "Worked directly with the business owner and staff to turn operational needs into technical fixes."
+      ],
+      "tags": [
+        "IT Support",
+        "Systems Administration",
+        "Stakeholder Communication"
+      ]
     },
     {
       "company": "Prou Education Recruitments",
       "title": "Customer Acquisition & Sales",
       "start": "2023-02",
       "end": "2023-08",
-      "location": "Bengaluru, India",
+      "location": "Bengaluru, India · Full-time",
       "highlights": [
         "Drove customer acquisition through outreach and lead follow-up as part of a sales team.",
         "Managed client relationships from first contact through to conversion."
       ],
-      "tags": ["Sales", "Client Relations", "Communication"]
+      "tags": [
+        "Sales",
+        "Client Relations",
+        "Communication"
+      ]
     },
     {
       "company": "Steel Authority of India Limited",
       "title": "Project Intern",
       "start": "2022-06",
       "end": "2022-07",
-      "location": "Bhilai, India",
+      "location": "Bhilai, India · Internship",
       "highlights": [
-        "Built a temperature-sensor fire detection prototype on Arduino that sends SMS alerts over GSM when a threshold is crossed.",
-        "Worked in a four-person team on sensor integration and the alerting logic."
+        "Built a temperature-sensor fire detection prototype that sends real-time SMS alerts over GSM when a threshold is crossed.",
+        "Worked in a four-person team on sensor integration and the alerting logic in C++."
       ],
-      "tags": ["Arduino", "C/C++", "GSM", "Embedded"]
-    },
-    {
-      "company": "Corizo",
-      "title": "Web Developer Intern",
-      "start": "2022-05",
-      "end": "2022-05",
-      "location": "India (remote)",
-      "highlights": [
-        "Built and deployed a working e-commerce front end in HTML, CSS and JavaScript, including product selection and a shopping cart.",
-        "Used Git for version control within a small team."
-      ],
-      "tags": ["HTML", "CSS", "JavaScript", "Git"]
+      "tags": [
+        "C++",
+        "Arduino",
+        "GSM",
+        "Embedded"
+      ]
     },
     {
       "company": "Paradox India",
       "title": "Content Writer",
       "start": "2020-06",
       "end": "2022-06",
-      "location": "India (remote)",
+      "location": "India · Freelance, remote",
       "highlights": [
         "Wrote and edited articles on science, space and music.",
         "Interviewed and profiled new and emerging artists with the editorial team."
       ],
-      "tags": ["Writing", "Editing", "Interviewing"]
+      "tags": [
+        "Writing",
+        "Editing",
+        "Interviewing"
+      ]
+    },
+    {
+      "company": "Corizo",
+      "title": "Web Developer Intern",
+      "start": "2022-05",
+      "end": "2022-05",
+      "location": "India · Internship, remote",
+      "highlights": [
+        "Built and deployed a working e-commerce front end in HTML, CSS and JavaScript, including product selection and a shopping cart.",
+        "Used Git for version control within a small team."
+      ],
+      "tags": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
     }
   ],
   "education": [
@@ -148,38 +286,97 @@
       "featured": true,
       "start": "2026",
       "associatedWith": "MSc Dissertation, Griffith College Dublin",
-      "metrics": ["AUC-ROC 0.975", "Recall 94.6%", "51M+ rows", "3 models benchmarked"],
+      "metrics": [
+        "AUC-ROC 0.975",
+        "Recall 94.6%",
+        "51M+ rows",
+        "3 models benchmarked"
+      ],
       "highlights": [
         "XGBoost classifier that predicts whether a Dublin Bikes station will run out of bikes or docks within the next hour, evaluated on a held-out 2026 test set.",
         "Built the data pipeline from 66 raw CSVs across two schema eras: a station ID crosswalk (116 of ~120 stations matched), Parquet conversion cutting ~4–5 GB to ~300–500 MB, and 37 time-aware features.",
         "Used a chronological split (train 2019–24, validate 2025, test 2026) to avoid temporal leakage; XGBoost (0.975) beat Random Forest (0.970) and Logistic Regression (0.947). Chose class weights over SMOTE given 5.6M training rows.",
         "Live Streamlit dashboard with SHAP per-prediction explanations, JCDecaux and Open-Meteo feeds, and a GitHub Actions job collecting live station data every 15 minutes."
       ],
-      "skills": ["XGBoost", "SHAP", "pandas", "Parquet", "Streamlit", "GitHub Actions"],
+      "skills": [
+        "XGBoost",
+        "SHAP",
+        "pandas",
+        "Parquet",
+        "Streamlit",
+        "GitHub Actions"
+      ],
       "links": []
     },
     {
       "title": "Hospital Readmission Risk Predictor",
-      "start": "2026",
+      "start": "2026-05",
       "associatedWith": "",
-      "metrics": ["AUROC 0.688", "Brier 0.094"],
-      "highlights": [
-        "Predicts hospital readmission risk on the UCI Diabetes 130-US dataset with XGBoost, Platt-scaled probabilities and SHAP explanations, deployed on Streamlit Cloud. Focus on calibrated, explainable risk scores rather than headline accuracy."
+      "metrics": [
+        "AUROC 0.69",
+        "Brier 0.094",
+        "101,766 records"
       ],
-      "skills": ["XGBoost", "Calibration", "SHAP", "Streamlit"],
+      "highlights": [
+        "Predicts 30-day readmission risk on the UCI Diabetes 130-US dataset (101,766 patient records) with XGBoost, Platt-scaled probabilities and per-patient SHAP explanations, deployed as a Streamlit app. Built for calibrated, explainable risk scores rather than headline accuracy."
+      ],
+      "skills": [
+        "XGBoost",
+        "Calibration",
+        "SHAP",
+        "Streamlit"
+      ],
       "links": [
-        { "label": "GitHub", "url": "https://github.com/mikebros2906/hospital-readmission" }
-      ]
+        {
+          "label": "GitHub",
+          "url": "https://github.com/mikebros2906/hospital-readmission"
+        }
+      ],
+      "end": "2026-06"
     },
     {
       "title": "Real-Time Traffic Streaming Pipeline",
       "associatedWith": "Griffith College Dublin",
-      "metrics": ["Kafka 3.9", "Spark 4.1", "Cassandra 5.0"],
+      "metrics": [
+        "Kafka 3.9",
+        "Spark 4.1",
+        "Cassandra 5.0"
+      ],
       "highlights": [
         "Built a Lambda/Kappa speed layer streaming M50 motorway traffic data through Kafka into Spark and Cassandra on an Ubuntu VM; fixed a Spark 4.1 connector incompatibility by moving to the Scala 2.13 builds."
       ],
-      "skills": ["Apache Kafka", "Apache Spark", "Cassandra", "Linux"],
+      "skills": [
+        "Apache Kafka",
+        "Apache Spark",
+        "Cassandra",
+        "Linux"
+      ],
       "links": []
+    },
+    {
+      "title": "Brain Tumour MRI & BBC News Classification",
+      "start": "2026-03",
+      "end": "2026-05",
+      "associatedWith": "Griffith College Dublin · group project",
+      "metrics": [
+        "98.4% CNN accuracy",
+        "92.5% LSTM weighted F1"
+      ],
+      "highlights": [
+        "Benchmarked four architectures (custom CNN, tuned CNN, MobileNetV2, ResNet50) on 3,000 brain MRI images, plus an LSTM classifier for 2,100+ BBC articles across 5 topics. Hash-based deduplication and leak-free stratified splits."
+      ],
+      "skills": [
+        "CNN",
+        "Transfer Learning",
+        "LSTM",
+        "TensorFlow / Keras"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/mikebros2906/Brain-tumor-and-bbc-text"
+        }
+      ]
     },
     {
       "title": "Brain Tumour Detection with YOLOv8",
@@ -189,10 +386,21 @@
       "highlights": [
         "Streamlit app for brain MRI tumour detection with YOLOv8, returning tumour type and bounding-box localisation with confidence scores. Full pipeline from YOLO-format data prep and transfer-learning training to deployed inference."
       ],
-      "skills": ["YOLOv8", "Deep Learning", "Python", "Streamlit"],
+      "skills": [
+        "YOLOv8",
+        "Deep Learning",
+        "Python",
+        "Streamlit"
+      ],
       "links": [
-        { "label": "GitHub", "url": "https://github.com/mikebros2906/Brain-Tumor-Prediction" },
-        { "label": "Live app", "url": "https://brain-tumor-prediction-somik-chowdhury.streamlit.app/" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/mikebros2906/Brain-Tumor-Prediction"
+        },
+        {
+          "label": "Live app",
+          "url": "https://brain-tumor-prediction-somik-chowdhury.streamlit.app/"
+        }
       ]
     },
     {
@@ -200,14 +408,28 @@
       "start": "2025-10",
       "end": "2025-12",
       "associatedWith": "Griffith College Dublin",
-      "metrics": ["Accuracy 0.912", "Macro-F1 0.897"],
+      "metrics": [
+        "Accuracy 0.912",
+        "Macro-F1 0.897"
+      ],
       "highlights": [
         "CRISP-DM pipeline predicting 7 medical conditions from clinical and lifestyle factors: multinomial logistic regression benchmarked against a tuned Random Forest (GridSearchCV, stratified k-fold), plus K-Means patient segmentation."
       ],
-      "skills": ["scikit-learn", "Logistic Regression", "Random Forest", "K-Means"],
+      "skills": [
+        "scikit-learn",
+        "Logistic Regression",
+        "Random Forest",
+        "K-Means"
+      ],
       "links": [
-        { "label": "GitHub", "url": "https://github.com/mikebros2906/Medical-Condition-Classification-and-Patient-Profiling-Using-Clinical-and-Lifestyle-Data" },
-        { "label": "Kaggle", "url": "https://www.kaggle.com/code/somikchowdhury/medical-condition-classification" }
+        {
+          "label": "GitHub",
+          "url": "https://github.com/mikebros2906/Medical-Condition-Classification-and-Patient-Profiling-Using-Clinical-and-Lifestyle-Data"
+        },
+        {
+          "label": "Kaggle",
+          "url": "https://www.kaggle.com/code/somikchowdhury/medical-condition-classification"
+        }
       ]
     },
     {
@@ -216,17 +438,28 @@
       "highlights": [
         "Twitter-style app built with FastAPI and MongoDB Atlas, using Firebase Authentication for sign-in and Azure Blob Storage for media uploads."
       ],
-      "skills": ["FastAPI", "MongoDB", "Firebase", "Azure Blob Storage"],
+      "skills": [
+        "FastAPI",
+        "MongoDB",
+        "Firebase",
+        "Azure Blob Storage"
+      ],
       "links": []
     },
     {
       "title": "E-Commerce Analytics Dashboards",
       "associatedWith": "Griffith College Dublin",
-      "metrics": ["14 dashboards"],
+      "metrics": [
+        "14 dashboards"
+      ],
       "highlights": [
         "Tableau analysis of the Olist Brazilian e-commerce dataset: 10 exploratory dashboards and 4 predictive ones using linear regression, time-series forecasting and LOD expressions."
       ],
-      "skills": ["Tableau", "Forecasting", "Regression"],
+      "skills": [
+        "Tableau",
+        "Forecasting",
+        "Regression"
+      ],
       "links": []
     },
     {
@@ -234,11 +467,17 @@
       "start": "2022-07",
       "end": "2022-11",
       "associatedWith": "SRM Institute of Science and Technology",
-      "metrics": ["97.41% test accuracy"],
+      "metrics": [
+        "97.41% test accuracy"
+      ],
       "highlights": [
         "Fine-tuned a pre-trained MobileNetV2 CNN to classify 9 fish species, with image preprocessing (scaling, cropping, filtering) in TensorFlow and Keras."
       ],
-      "skills": ["TensorFlow", "Keras", "Transfer Learning"],
+      "skills": [
+        "TensorFlow",
+        "Keras",
+        "Transfer Learning"
+      ],
       "links": []
     },
     {
@@ -249,19 +488,58 @@
       "highlights": [
         "Python GUI that analyses gamma-scan data from the Bhabha Atomic Research Centre using FFT and ratio-based comparison to flag uneven liquid distribution, replacing manual evaluation; results matched a completed case study."
       ],
-      "skills": ["Python", "FFT", "Signal Processing", "GUI"],
+      "skills": [
+        "Python",
+        "FFT",
+        "Signal Processing",
+        "GUI"
+      ],
       "links": []
     }
   ],
   "archive": [
-    { "title": "Room booking app (FastAPI + MongoDB)", "year": "2025", "context": "Griffith College Dublin" },
-    { "title": "Breast cancer classifier (SVM)", "year": "2025", "context": "Personal", "url": "https://github.com/mikebros2906/Cancer-prediction-using-ML" },
-    { "title": "Melbourne housing EDA", "year": "2025", "context": "Griffith College Dublin" },
-    { "title": "Wordle in Java", "year": "2024", "context": "Griffith College Dublin", "url": "https://github.com/mikebros2906/Wordle-Game" },
-    { "title": "Hospital management system (Oracle SQL / PL-SQL)", "year": "2022", "context": "SRM IST" },
-    { "title": "Password door lock on 8051 (C, Proteus)", "year": "2022", "context": "SRM IST" },
-    { "title": "Tic-tac-toe in 8086 assembly", "year": "2021", "context": "SRM IST" },
-    { "title": "IoT smart home (Cisco Packet Tracer)", "year": "2021", "context": "SRM IST" }
+    {
+      "title": "Room booking app (FastAPI + MongoDB)",
+      "year": "2025",
+      "context": "Griffith College Dublin"
+    },
+    {
+      "title": "Breast cancer classifier (SVM)",
+      "year": "2025",
+      "context": "Personal",
+      "url": "https://github.com/mikebros2906/Cancer-prediction-using-ML"
+    },
+    {
+      "title": "Melbourne housing EDA",
+      "year": "2025",
+      "context": "Griffith College Dublin"
+    },
+    {
+      "title": "Wordle in Java",
+      "year": "2024",
+      "context": "Griffith College Dublin",
+      "url": "https://github.com/mikebros2906/Wordle-Game"
+    },
+    {
+      "title": "Hospital management system (Oracle SQL / PL-SQL)",
+      "year": "2022",
+      "context": "SRM IST"
+    },
+    {
+      "title": "Password door lock on 8051 (C, Proteus)",
+      "year": "2022",
+      "context": "SRM IST"
+    },
+    {
+      "title": "Tic-tac-toe in 8086 assembly",
+      "year": "2021",
+      "context": "SRM IST"
+    },
+    {
+      "title": "IoT smart home (Cisco Packet Tracer)",
+      "year": "2021",
+      "context": "SRM IST"
+    }
   ],
   "certifications": [
     {
