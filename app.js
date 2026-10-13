@@ -978,12 +978,12 @@
       });
     });
 
-    // --- ABOUT: pinned word reveal (desktop only) ---
-    mediaQuery.add("(min-width: 861px)", () => {
+    // --- ABOUT: pinned word reveal (desktop, tall-enough windows only) ---
+    mediaQuery.add("(min-width: 861px) and (min-height: 620px)", () => {
       const aboutSection = document.querySelector(".about");
       const aboutWords = aboutSection.querySelectorAll(".about__text .word");
       const wordCount = aboutWords.length;
-      const scrollDistance = Math.max(wordCount * 18, innerHeight * 1.5);
+      const scrollDistance = Math.max(wordCount * 10, innerHeight * 1.2);
 
       aboutSection.style.height = `${scrollDistance + innerHeight}px`;
 
