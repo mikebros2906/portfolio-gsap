@@ -20,6 +20,10 @@
 
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+  // Always start at the top on load/reload. Restoring a mid-page scroll
+  // position inside pinned sections leaves animations in a half state.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
 
   /* ================================================================
      1. THEME SYSTEM
@@ -1257,6 +1261,19 @@
 
   function initSmoothAnchors() {
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let navTween = null;
+
+    // Cancel only on genuine user input. (GSAP's built-in autoKill also
+    // fires when pinned sections shift the layout mid-scroll, which
+    // stopped the animation partway on real browsers.)
+    const cancel = () => {
+      if (navTween) { navTween.kill(); navTween = null; }
+    };
+    addEventListener("wheel", cancel, { passive: true });
+    addEventListener("touchstart", cancel, { passive: true });
+    addEventListener("keydown", (e) => {
+      if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) cancel();
+    });
 
     document.addEventListener("click", (e) => {
       const link = e.target.closest('a[href^="#"]');
@@ -1267,6 +1284,7 @@
       if (!target) return;
 
       e.preventDefault();
+      cancel();
 
       // Pinned sections start their animation exactly at "top top",
       // so land on the section's true top with no offset.
@@ -1276,11 +1294,12 @@
       if (reduceMotion) {
         window.scrollTo(0, y);
       } else {
-        gsap.to(window, {
-          scrollTo: { y, autoKill: true },
+        navTween = gsap.to(window, {
+          scrollTo: { y, autoKill: false },
           duration: Math.min(1.8, Math.max(0.7, distance / 4000)),
           ease: "power3.inOut",
           overwrite: true,
+          onComplete: () => { navTween = null; },
         });
       }
 
@@ -1434,6 +1453,17 @@
      8. BOOT SEQUENCE
      Mobile menu toggle → Fetch data → Render → Loader → Init all.
      ================================================================ */
+
+  // SC logo = home: full page reload, back at the very top
+  const navBrand = document.getElementById("navBrand");
+  if (navBrand) {
+    navBrand.addEventListener("click", (e) => {
+      e.preventDefault();
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (err) { /* ignore */ }
+      window.scrollTo(0, 0);
+      location.reload();
+    });
+  }
 
   // Mobile nav toggle
   const navToggle = document.getElementById("navToggle");
