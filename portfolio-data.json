@@ -3,7 +3,7 @@
     "fullName": "Somik Chowdhury",
     "headline": "Data Analyst & ML Engineer — MSc Big Data Management and Analytics, Griffith College Dublin. I build end-to-end pipelines: messy raw data in, calibrated and explainable predictions out.",
     "location": "Dublin, Ireland",
-    "summary": "I'm a data and machine learning engineer based in Dublin, finishing an MSc in Big Data Management and Analytics at Griffith College Dublin after a Higher Diploma in Computing and a BEng in Electronics and Computer Engineering.\n\nMy dissertation, StationSafe, predicts Dublin Bikes station stock-outs an hour ahead from 51M+ rows of historical data, live APIs and weather - XGBoost at 0.975 AUC, explained with SHAP and served through a live Streamlit dashboard. I care about the unglamorous parts that make models trustworthy: clean data, leak-free time splits, calibrated probabilities and honest evaluation.\n\nI've also built streaming pipelines with Kafka, Spark and Cassandra, cloud apps with FastAPI, MongoDB and Azure, and BI dashboards in Tableau and Power BI.",
+    "summary": "I'm a data and machine learning engineer based in Dublin, finishing an MSc in Big Data Management and Analytics at Griffith College Dublin after a Higher Diploma in Computing and a BEng in Electronics and Computer Engineering.\n\nMy dissertation, StationSafe, predicts Dublin Bikes station stock-outs an hour ahead from 51M+ rows of historical data, live APIs and weather — XGBoost at 0.975 AUC, explained with SHAP and served through a live Streamlit dashboard. I care about the unglamorous parts that make models trustworthy: clean data, leak-free time splits, calibrated probabilities and honest evaluation.\n\nI've also built streaming pipelines with Kafka, Spark and Cassandra, cloud apps with FastAPI, MongoDB and Azure, and BI dashboards in Tableau and Power BI.",
     "contacts": {
       "email": "somikireland2906@gmail.com",
       "linkedin": "https://www.linkedin.com/in/somikchowdhury",
@@ -501,44 +501,79 @@
     {
       "title": "Room booking app (FastAPI + MongoDB)",
       "year": "2025",
-      "context": "Griffith College Dublin"
+      "context": "Griffith College Dublin",
+      "highlights": [
+        "Room booking web application built with FastAPI and MongoDB for the Cloud Platforms and Applications module."
+      ]
     },
     {
       "title": "Breast cancer classifier (SVM)",
       "year": "2025",
       "context": "Personal",
-      "url": "https://github.com/mikebros2906/Cancer-prediction-using-ML"
+      "url": "https://github.com/mikebros2906/Cancer-prediction-using-ML",
+      "highlights": [
+        "Classifies breast tumours as benign or malignant from diagnostic measurements using a Support Vector Machine (scikit-learn).",
+        "Cleaned and standardised a 500+ row dataset and evaluated the model on a held-out train/test split."
+      ]
     },
     {
       "title": "Melbourne housing EDA",
       "year": "2025",
-      "context": "Griffith College Dublin"
+      "context": "Griffith College Dublin",
+      "highlights": [
+        "Exploratory analysis of the Melbourne Housing dataset (35,000+ records) in Jupyter.",
+        "Imputed missing values and handled outliers before analysis.",
+        "Summarised price drivers and suggested focus areas for a sales strategy."
+      ]
     },
     {
       "title": "Wordle in Java",
       "year": "2024",
       "context": "Griffith College Dublin",
-      "url": "https://github.com/mikebros2906/Wordle-Game"
+      "url": "https://github.com/mikebros2906/Wordle-Game",
+      "highlights": [
+        "Console-based Wordle game in Java with input validation, scoring and attempt tracking.",
+        "Letter-by-letter feedback, regex validation and menu-driven gameplay, structured with OOP for reuse.",
+        "Added a small JavaScript web page to display scores."
+      ]
     },
     {
       "title": "Hospital management system (Oracle SQL / PL-SQL)",
       "year": "2022",
-      "context": "SRM IST"
+      "context": "SRM IST",
+      "highlights": [
+        "Normalised relational schema for patients, staff and billing in Oracle SQL.",
+        "Automated registration, billing and staff workflows with PL/SQL stored procedures and triggers, plus role-based access control.",
+        "Used indexes, sequences and cursors for efficient, reliable transactions."
+      ]
     },
     {
       "title": "Password door lock on 8051 (C, Proteus)",
       "year": "2022",
-      "context": "SRM IST"
+      "context": "SRM IST",
+      "highlights": [
+        "Password-protected door lock on an 8051 microcontroller, written in C in Keil uVision5.",
+        "Handles keypad input, five-digit password verification, the LCD display and the door motor.",
+        "Validated end-to-end in a Proteus circuit simulation."
+      ]
     },
     {
       "title": "Tic-tac-toe in 8086 assembly",
       "year": "2021",
-      "context": "SRM IST"
+      "context": "SRM IST",
+      "highlights": [
+        "Two-player tic-tac-toe written in 8086 assembly and run in the emu8086 emulator.",
+        "Implements turn handling, horizontal, vertical and diagonal win detection, and draws."
+      ]
     },
     {
       "title": "IoT smart home (Cisco Packet Tracer)",
       "year": "2021",
-      "context": "SRM IST"
+      "context": "SRM IST",
+      "highlights": [
+        "Simulated smart home in Cisco Packet Tracer connecting a home gateway, smartphone and smart devices.",
+        "Automations: carbon monoxide alarm, motion-triggered webcam, humidity-controlled fan and temperature-based siren."
+      ]
     }
   ],
   "certifications": [

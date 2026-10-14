@@ -531,16 +531,57 @@
       projectsGrid.insertAdjacentHTML("beforeend", cardHTML);
     });
 
-    // --- Projects: compact archive list ---
+    // --- Projects: archive accordion (one open at a time) ---
     const archive = document.getElementById("projectsArchive");
     if (archive && (data.archive || []).length) {
-      const rows = data.archive.map((a) => {
-        const title = a.url
-          ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>`
-          : `<span>${esc(a.title)}</span>`;
-        return `<li>${title}<span class="archive__meta">${esc(a.context || "")} · ${esc(a.year || "")}</span></li>`;
+      const rows = data.archive.map((a, i) => {
+        const panelId = `archive-panel-${i}`;
+        const bullets = (a.highlights || []).map((h) => `<li>${esc(h)}</li>`).join("");
+        const link = a.url
+          ? `<a class="archive__link" href="${esc(a.url)}" target="_blank" rel="noopener">View on GitHub ↗</a>`
+          : "";
+        return `
+          <li class="archive__item">
+            <button class="archive__head" type="button" aria-expanded="false" aria-controls="${panelId}">
+              <span class="archive__name">${esc(a.title)}</span>
+              <span class="archive__meta">${esc(a.context || "")} · ${esc(a.year || "")}</span>
+              <span class="archive__icon" aria-hidden="true"></span>
+            </button>
+            <div class="archive__panel" id="${panelId}" role="region">
+              <div class="archive__panel-inner">
+                <ul class="archive__bullets">${bullets}</ul>
+                ${link}
+              </div>
+            </div>
+          </li>`;
       }).join("");
       archive.innerHTML = `<h3 class="archive__title">Earlier &amp; smaller projects</h3><ul class="archive__list">${rows}</ul>`;
+
+      // Panel heights change the page length, so pinned sections further
+      // down (Skills) need their ScrollTrigger positions recalculated.
+      let refreshTimer;
+      const refreshAfterToggle = () => {
+        clearTimeout(refreshTimer);
+        refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 450);
+      };
+
+      archive.addEventListener("click", (e) => {
+        const head = e.target.closest(".archive__head");
+        if (!head) return;
+        const item = head.parentElement;
+        const opening = !item.classList.contains("is-open");
+
+        archive.querySelectorAll(".archive__item.is-open").forEach((other) => {
+          other.classList.remove("is-open");
+          other.querySelector(".archive__head").setAttribute("aria-expanded", "false");
+        });
+
+        if (opening) {
+          item.classList.add("is-open");
+          head.setAttribute("aria-expanded", "true");
+        }
+        refreshAfterToggle();
+      });
     }
 
     // --- Skills: category buttons ---
@@ -1291,7 +1332,11 @@
       const y = id === "hero" ? 0 : target.getBoundingClientRect().top + window.scrollY;
       const distance = Math.abs(y - window.scrollY);
 
-      if (reduceMotion) {
+      // From the phone menu, jump straight there while the overlay fades
+      // out — no long scroll animation underneath it.
+      const fromPhoneMenu = innerWidth <= 860 && link.closest(".nav__menu");
+
+      if (reduceMotion || fromPhoneMenu) {
         window.scrollTo(0, y);
       } else {
         navTween = gsap.to(window, {
@@ -1465,20 +1510,32 @@
     });
   }
 
-  // Mobile nav toggle
+  // Mobile nav: full-screen overlay, page scroll locked while open
   const navToggle = document.getElementById("navToggle");
   const navMenu = document.getElementById("navMenu");
 
-  navToggle.addEventListener("click", () => {
-    navToggle.classList.toggle("open");
-    navMenu.classList.toggle("open");
-  });
+  function setMenu(open) {
+    navToggle.classList.toggle("open", open);
+    navMenu.classList.toggle("open", open);
+    document.documentElement.classList.toggle("menu-open", open);
+    navToggle.setAttribute("aria-expanded", String(open));
+    navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  }
+
+  navToggle.setAttribute("aria-expanded", "false");
+  navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
 
   navMenu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      navToggle.classList.remove("open");
-      navMenu.classList.remove("open");
-    });
+    link.addEventListener("click", () => setMenu(false));
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navMenu.classList.contains("open")) setMenu(false);
+  });
+
+  // Rotating a tablet / widening the window past the breakpoint closes it
+  addEventListener("resize", () => {
+    if (innerWidth > 860 && navMenu.classList.contains("open")) setMenu(false);
   });
 
   // Fetch data → render → animate

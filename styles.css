@@ -2870,7 +2870,7 @@ body.cursor-hover .cursor-ring {
   margin: 0 0 16px;
 }
 .archive__list { border-top: 1px solid var(--border); }
-.archive__list li {
+.archive__list > li {
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -2890,7 +2890,7 @@ body.cursor-hover .cursor-ring {
   white-space: nowrap;
 }
 @media (max-width: 600px) {
-  .archive__list li { flex-direction: column; gap: 4px; }
+  .archive__list > li { flex-direction: column; gap: 4px; }
 }
 
 /* --- Education note --- */
@@ -3002,4 +3002,222 @@ body.cursor-hover .cursor-ring {
   .about__pin { position: relative; height: auto; padding: 100px clamp(24px, 5vw, 64px); }
   .about__text .word { opacity: 1 !important; }
   .about__langs { opacity: 1 !important; }
+}
+
+
+/* ================================================================
+   PROJECT ARCHIVE — accordion
+   Panels animate open via grid-template-rows (0fr → 1fr), which
+   handles any content height without JS measuring.
+   ================================================================ */
+.archive__list li.archive__item {
+  display: block;
+  padding: 0;
+}
+.archive__head {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 20px;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  min-height: 56px;
+  text-align: left;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.archive__head:hover,
+.archive__item.is-open .archive__head { color: var(--ink); }
+.archive__head:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+.archive__name { font-weight: 400; }
+
+/* plus → minus icon */
+.archive__icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  justify-self: end;
+}
+.archive__icon::before,
+.archive__icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1.5px;
+  background: var(--accent);
+  transition: transform 0.4s var(--e);
+}
+.archive__icon::after { transform: rotate(90deg); }
+.archive__item.is-open .archive__icon::after { transform: rotate(0deg); }
+
+.archive__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--e);
+}
+.archive__item.is-open .archive__panel { grid-template-rows: 1fr; }
+.archive__panel-inner {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.35s, transform 0.45s var(--e);
+}
+.archive__item.is-open .archive__panel-inner {
+  opacity: 1;
+  transform: none;
+}
+.archive__bullets {
+  display: grid;
+  gap: 8px;
+  max-width: 820px;
+  padding: 0 0 6px;
+}
+.archive__bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink2);
+}
+.archive__bullets li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 12px;
+}
+.archive__list .archive__link {
+  display: inline-block;
+  margin: 8px 0 20px;
+  font-family: var(--fm);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 2px;
+}
+.archive__panel-inner > .archive__bullets:last-child { padding-bottom: 20px; }
+
+/* Phone: title on top, meta underneath, icon stays on the right */
+@media (max-width: 600px) {
+  .archive__head {
+    grid-template-columns: 1fr 20px;
+    grid-template-areas: "name icon" "meta icon";
+    row-gap: 4px;
+    padding: 14px 0;
+  }
+  .archive__name { grid-area: name; font-size: 15px; }
+  .archive__meta { grid-area: meta; white-space: normal; }
+  .archive__icon { grid-area: icon; }
+  .archive__bullets li { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .archive__panel, .archive__panel-inner, .archive__icon::after { transition: none; }
+}
+
+
+/* ================================================================
+   PHONE MENU — full-screen overlay
+   The nav uses backdrop-filter, which makes it the containing block
+   for fixed children, so the menu is sized to the viewport explicitly
+   (100dvh) rather than with inset:0. z-index:-1 keeps it under the
+   logo, theme toggle and close button inside the nav.
+   ================================================================ */
+@media (max-width: 860px) {
+  .nav__menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: -1;
+    margin: 0;
+    padding: 96px 24px 48px;
+    border: 0;
+    border-radius: 0;
+    background: var(--bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: none;
+    transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+  }
+
+  .nav__menu.open,
+  [data-theme="light"] .nav__menu.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    background: var(--bg);
+    transition: opacity 0.35s ease;
+  }
+
+  .nav__menu .nav__link {
+    font-family: var(--fh);
+    font-size: clamp(26px, 8vw, 38px);
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: var(--ink2);
+    padding: 8px 0;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.25s ease, transform 0.35s var(--e), color 0.3s;
+  }
+
+  .nav__menu .nav__link.active { color: var(--ink); }
+  .nav__menu .nav__link::after { bottom: 2px; height: 2px; }
+
+  .nav__menu .nav__link--cta {
+    margin-top: 18px;
+    padding: 12px 34px;
+    font-size: clamp(18px, 5vw, 22px);
+    color: var(--ink);
+  }
+
+  .nav__menu.open .nav__link {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.4s ease, transform 0.5s var(--e), color 0.3s;
+  }
+
+  /* staggered entrance; closing has no delay so it feels snappy */
+  .nav__menu.open .nav__link:nth-child(1) { transition-delay: 0.08s; }
+  .nav__menu.open .nav__link:nth-child(2) { transition-delay: 0.12s; }
+  .nav__menu.open .nav__link:nth-child(3) { transition-delay: 0.16s; }
+  .nav__menu.open .nav__link:nth-child(4) { transition-delay: 0.20s; }
+  .nav__menu.open .nav__link:nth-child(5) { transition-delay: 0.24s; }
+  .nav__menu.open .nav__link:nth-child(6) { transition-delay: 0.28s; }
+  .nav__menu.open .nav__link:nth-child(7) { transition-delay: 0.32s; }
+
+  /* page underneath can't scroll while the menu is open */
+  html.menu-open,
+  html.menu-open body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+}
+
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) {
+  .nav__menu, .nav__menu .nav__link { transition: none !important; }
 }
